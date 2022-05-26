@@ -46,7 +46,7 @@
       v-loading="loading"
       border
       :data="categoryList"
-      @selection-change="selectionChange"
+      @selection-change="selectionChange()"
     >
       <!-- 表格列 -->
       <el-table-column type="selection" width="55" />
@@ -64,14 +64,10 @@
       <!-- 列操作 -->
       <el-table-column label="操作" width="160" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="openModel(scope.row)">
+          <el-button type="primary" size="mini" @click="openModel(scope.row)" @confirm="deleteCategory(scope.row.id)">
             编辑
           </el-button>
-          <el-popconfirm
-            title="确定删除吗？"
-            style="margin-left:1rem"
-            @confirm="deleteCategory(scope.row.id)"
-          >
+          <el-popconfirm title="确定删除吗？" style="margin-left:1rem">
             <el-button slot="reference" size="mini" type="danger">
               删除
             </el-button>
@@ -160,15 +156,48 @@ export default {
           console.log(error)
         })
     },
-    selectionChange() {
-
+    // 分类的ID放到 idList中
+    selectionChange(val) {
+      console.log(val)
+      this.categoryIdList = []
+      console.log(this.categoryIdList)
+      this.categoryList.forEach(item => {
+        this.categoryIdList.push(item.id)
+      })
     },
-    openModel() {
-
+    openModel(category) {
+      if (category != null) {
+        this.categoryForm = JSON.parse(JSON.stringify(category))
+        this.$refs.categoryTitle.innerHTML = '修改分类'
+      } else {
+        this.categoryForm.id = null
+        this.categoryForm.categoryName = ''
+        this.$refs.categoryTitle.innerHTML = '添加分类'
+      }
+      this.addOrEdit = true
     },
-
-    deleteCategory() {
-
+    // 删除分类
+    deleteCategory(id) {
+      let param = {}
+      if (id == null) {
+        param = { data: this.categoryIdList }
+        console.log(param)
+        API.deletedCategoryBatch(param).then(res => {
+          // TODO
+        }).catch(error => {
+          console.log(error)
+        })
+      } else {
+        API.deletedCategory(id)
+          .then(res => {
+            if (res.flag) {
+              this.$notify.success('成功', res.message)
+              this.listCategories()
+            }
+          }).catch(error => {
+            console.log(error)
+          })
+      }
     },
     addOrEditCategory() {
 

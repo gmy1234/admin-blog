@@ -15,11 +15,19 @@ export default {
       }
     })
   },
-  // 查询分页列表
-  search(current, size, keywords) {
+  // 删除分类
+  deletedCategory(id) {
     return request({
-      url: base + '/getAll',
-      method: 'get'
+      url: base + '/deleted/' + id,
+      method: 'post'
+    })
+  },
+  // 批量删除分类
+  deletedCategoryBatch(ids) {
+    return request({
+      url: base + '/deleteBatch',
+      method: 'delete',
+      data: ids
     })
   }
 
