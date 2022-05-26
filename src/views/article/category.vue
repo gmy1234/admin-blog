@@ -79,14 +79,14 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- 分页 -->
+    <!-- 分页 TODO: bug-->
     <el-pagination
       class="pagination-container"
       background
       :current-page="current"
       :page-size="size"
       :total="count"
-      :page-sizes="[10, 20]"
+      :page-sizes="[5, 10]"
       layout="total, sizes, prev, pager, next, jumper"
       @size-change="sizeChange"
       @current-change="currentChange"
@@ -139,9 +139,9 @@ export default {
         id: null,
         categoryName: ''
       },
-      current: 1,
-      size: 10,
-      count: 0
+      current: 1, // 当前页
+      size: 10, // 每页大小
+      count: 0 // 总记录数
 
     }
   },
@@ -151,9 +151,8 @@ export default {
   methods: {
     // 分页获取所有分类列表
     listCategories() {
-      API.getAllCategory()
+      API.getAllCategory(this.current, this.size, this.keywords)
         .then(res => {
-          console.log(res)
           this.categoryList = res.data.recordList
           this.count = res.count
           this.loading = false
@@ -167,20 +166,24 @@ export default {
     openModel() {
 
     },
-    searchCategories() {
 
-    },
     deleteCategory() {
 
     },
     addOrEditCategory() {
 
     },
-    sizeChange() {
-
+    searchCategories() {
+      this.current = 1
+      this.listCategories()
     },
-    currentChange() {
-
+    sizeChange(size) {
+      this.size = size
+      this.listCategories()
+    },
+    currentChange(curren) {
+      this.current = curren
+      this.listCategories()
     }
 
   }
@@ -194,5 +197,10 @@ export default {
   align-items: center;
   margin-bottom: 1.25rem;
   margin-top: 2.25rem;
+}
+.pagination-container {
+  float: right;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 </style>
