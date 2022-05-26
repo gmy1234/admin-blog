@@ -13,7 +13,8 @@ import store from './store'
 import router from './router'
 
 import '@/icons' // icon
-import '@/permission' // permission control
+import '@/permission'
+import dayjs from 'dayjs'; // permission control
 
 /**
  * If you don't want to use mock-server
@@ -35,6 +36,13 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
+Vue.filter('date', function(value, formatStr = 'YYYY-MM-DD') {
+  return dayjs(value).format(formatStr)
+})
+
+Vue.filter('dateTime', function(value, formatStr = 'YYYY-MM-DD HH:mm:ss') {
+  return dayjs(value).format(formatStr)
+})
 new Vue({
   el: '#app',
   router,

@@ -160,6 +160,34 @@ export const constantRoutes = [
     ]
   },
 
+  // 文章管理路由
+  {
+    path: '/article',
+    component: Layout,
+    name: '文章管理',
+    meta: { title: '文章管理', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'publish',
+        name: '发布文章',
+        component: () => import('@/views/article/publish'),
+        meta: { title: '发布文章', icon: 'table' }
+      },
+      {
+        path: 'tree',
+        name: 'Tree',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'Tree', icon: 'tree' }
+      },
+      {
+        path: 'category',
+        name: '分类列表',
+        component: () => import('@/views/article/category'),
+        meta: { title: '分类列表', icon: 'tree' }
+      }
+    ]
+  },
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
