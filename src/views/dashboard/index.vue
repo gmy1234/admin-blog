@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">name: {{ name }}</div>
-    <div>OKKK</div>
+    <div>推到DEV</div>
   </div>
 </template>
 
