@@ -123,7 +123,7 @@
 </template>
 
 <script>
-import API from '../../api/category.js'
+import API from '../../api/article/category.js'
 export default {
   name: 'Category',
 

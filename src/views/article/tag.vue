@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import API from '../../api/tag'
+import API from '../../api/article/tag'
 export default {
   inject: ['reload'], // 注入重新加载方法
   name: 'Tag',

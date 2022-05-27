@@ -43,6 +43,7 @@ export const constantRoutes = [
     hidden: true
   },
 
+  // 首页
   {
     path: '/',
     component: Layout,
@@ -172,6 +173,12 @@ export const constantRoutes = [
         name: '发布文章',
         component: () => import('@/views/article/publish'),
         meta: { title: '发布文章', icon: 'table' }
+      },
+      {
+        path: '',
+        name: '文章列表',
+        component: () => import('@/views/article/list'),
+        meta: { title: '文章列表', icon: 'table' }
       },
       {
         path: 'tag',
