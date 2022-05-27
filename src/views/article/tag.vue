@@ -170,11 +170,9 @@ export default {
       this.listTag()
     },
     sizeChange(size) {
-      alert(size)
       this.listTag()
     },
     currentChange(current) {
-      alert(current)
       this.current = current
       this.listTag()
     },
@@ -200,8 +198,8 @@ export default {
         ).then(() => {
           API.deletedTag(id).then(res => {
             if (res.flag) {
-              this.reload()
               this.$message.success('成功', res.message)
+              this.reload()
             }
           }).catch(error => {
             console.log(error)

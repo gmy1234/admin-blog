@@ -40,7 +40,6 @@
         </el-button>
       </div>
     </div>
-
     <!-- 表格展示 -->
     <el-table
       v-loading="loading"
@@ -67,9 +66,9 @@
           <el-button type="primary" size="mini" @click="openModel(scope.row)" >
             编辑
           </el-button>
-          <el-popconfirm title="确定删除吗？" style="margin-left:1rem" @confirm="deleteCategory(scope.row.id)">
-            <el-button slot="reference" size="mini" type="danger">删除</el-button>
-          </el-popconfirm>
+          <el-button slot="reference" size="mini" type="danger" @click="deleteCategory(scope.row.id)">
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -85,6 +84,13 @@
       @size-change="sizeChange"
       @current-change="currentChange"
     />
+    <el-pagination
+      layout="prev, pager, next"
+      :total="count"
+      :page-size="size"
+      :current-page="current"
+    @current-change="currentChange">
+    </el-pagination>
     <!-- 批量删除对话框 -->
     <el-dialog :visible.sync="isDelete" width="30%">
       <div slot="title" class="dialog-title-container">
@@ -186,15 +192,25 @@ export default {
           console.log(error)
         })
       } else { // 根据ID 单个删除
-        API.deletedCategory(id)
-          .then(res => {
-            if (res.flag) {
-              this.$message.success('成功', res.message)
-              this.listCategories()
-            }
-          }).catch(error => {
-            console.log(error)
-          })
+        this.$confirm(
+          `确定进行删除操作?`,
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }
+        ).then(() => {
+          API.deletedCategory(id)
+            .then(res => {
+              if (res.flag) {
+                this.$message.success('成功', res.message)
+                this.listCategories()
+              }
+            }).catch(error => {
+              console.log(error)
+            })
+        })
       }
     },
     addOrEditCategory() {
