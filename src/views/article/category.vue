@@ -46,7 +46,7 @@
       v-loading="loading"
       border
       :data="categoryList"
-      @selection-change="selectionChange()"
+      @selection-change="selectionChange"
     >
       <!-- 表格列 -->
       <el-table-column type="selection" width="55" />
@@ -157,11 +157,10 @@ export default {
         })
     },
     // 分类的ID放到 idList中
-    selectionChange(val) {
-      console.log(val)
+    selectionChange(categoryList) {
       this.categoryIdList = []
       console.log(this.categoryIdList)
-      this.categoryList.forEach(item => {
+      categoryList.forEach(item => {
         this.categoryIdList.push(item.id)
       })
     },
@@ -179,19 +178,20 @@ export default {
     // 删除分类
     deleteCategory(id) {
       let param = {}
+      // 批量删除
       if (id == null) {
         param = { data: this.categoryIdList }
         console.log(param)
         API.deletedCategoryBatch(param).then(res => {
-          // TODO
+          // TODO :批量删除
         }).catch(error => {
           console.log(error)
         })
-      } else {
+      } else { // 根据ID 单个删除
         API.deletedCategory(id)
           .then(res => {
             if (res.flag) {
-              this.$notify.success('成功', res.message)
+              this.$message.success('成功', res.message)
               this.listCategories()
             }
           }).catch(error => {
@@ -200,7 +200,21 @@ export default {
       }
     },
     addOrEditCategory() {
-
+      if (this.categoryForm.categoryName.trim() === '') {
+        this.$message.error('分类名不能为空')
+        return false
+      }
+      API.saveAndUpdateCategory(this.categoryForm).then(res => {
+        if (res.flag) {
+          this.$message.success('成功')
+          this.listCategories()
+        } else {
+          this.$message.error('失败')
+        }
+      }).catch(error => {
+        console.log(error)
+      })
+      this.addOrEdit = false
     },
     searchCategories() {
       this.current = 1

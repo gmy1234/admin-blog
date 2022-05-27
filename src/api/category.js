@@ -23,11 +23,19 @@ export default {
     })
   },
   // 批量删除分类
-  deletedCategoryBatch(ids) {
+  deletedCategoryBatch(param) {
     return request({
       url: base + '/deleteBatch',
       method: 'delete',
-      data: ids
+      config: param
+    })
+  },
+  // 添加或者修改分类
+  saveAndUpdateCategory(form) {
+    return request({
+      url: base + '/saveAndUpdateCategory',
+      method: 'post',
+      data: form
     })
   }
 
