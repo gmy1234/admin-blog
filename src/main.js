@@ -15,6 +15,7 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission'
 import dayjs from 'dayjs'; // permission control
+import './assets/css/index.css' // 引入全局样式
 
 /**
  * If you don't want to use mock-server
@@ -35,6 +36,7 @@ Vue.use(ElementUI, { locale })
 // Vue.use(ElementUI)
 
 Vue.config.productionTip = false
+Vue.prototype.$moment = dayjs // 引入
 
 Vue.filter('date', function(value, formatStr = 'YYYY-MM-DD') {
   return dayjs(value).format(formatStr)
