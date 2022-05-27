@@ -64,13 +64,11 @@
       <!-- 列操作 -->
       <el-table-column label="操作" width="160" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="openModel(scope.row)" @confirm="deleteCategory(scope.row.id)">
+          <el-button type="primary" size="mini" @click="openModel(scope.row)" >
             编辑
           </el-button>
-          <el-popconfirm title="确定删除吗？" style="margin-left:1rem">
-            <el-button slot="reference" size="mini" type="danger">
-              删除
-            </el-button>
+          <el-popconfirm title="确定删除吗？" style="margin-left:1rem" @confirm="deleteCategory(scope.row.id)">
+            <el-button slot="reference" size="mini" type="danger">删除</el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
@@ -182,8 +180,8 @@ export default {
       if (id == null) {
         param = { data: this.categoryIdList }
         console.log(param)
+        // TODO :批量删除
         API.deletedCategoryBatch(param).then(res => {
-          // TODO :批量删除
         }).catch(error => {
           console.log(error)
         })

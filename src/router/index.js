@@ -174,10 +174,10 @@ export const constantRoutes = [
         meta: { title: '发布文章', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'tag',
+        name: '标签管理',
+        component: () => import('@/views/article/tag'),
+        meta: { title: '标签管理', icon: 'tree' }
       },
       {
         path: 'category',
