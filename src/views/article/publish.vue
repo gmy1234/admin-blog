@@ -213,8 +213,8 @@ export default {
   name: 'Publish',
   data() {
     return {
-      addOrEdit: false,
-      autoSave: true,
+      addOrEdit: false, // 发布文章对话框展示
+      autoSave: true, // 自动保存
       categoryName: '',
       tagName: '',
       categoryList: [],
@@ -248,6 +248,9 @@ export default {
       }
     }
   },
+  created() {
+
+  },
   computed: {
     tagClass() {
       return function(item) {
@@ -275,7 +278,72 @@ export default {
     },
     // 保存草稿
     saveArticleDraft() {
+      if (this.article.articleTitle.trim() === '') {
+        this.$message.error('文章标题不能为空')
+        return false
+      }
+      if (this.article.articleContent.trim() === '') {
+        this.$message.error('文章内容不能为空')
+        return false
+      }
+      this.article.status = 3 // 草稿
+      articleAPI.publishArticle(this.article)
+        .then(res => {
+          if (res.flag) {
+            this.$message.success('发布成功')
+          } else {
+            this.$message.error('发布失败')
+          }
+        }).catch(error => {
+          console.log(error)
+        })
+    },
+    // 发布文章
+    saveOrUpdateArticle() {
+      // 校验
+      if (this.article.articleTitle.trim() === '') {
+        this.$message.error('文章标题不能为空')
+        return false
+      }
+      if (this.article.articleContent.trim() === '') {
+        this.$message.error('文章内容不能为空')
+        return false
+      }
+      if (this.article.categoryName == null) {
+        this.$message.error('文章分类不能为空')
+        return false
+      }
+      if (this.article.tagNameList.length === 0) {
+        this.$message.error('文章标签不能为空')
+        return false
+      }
 
+      articleAPI.publishArticle(this.article)
+        .then(res => {
+          if (res.flag) {
+            this.$message.success('发布成功')
+          } else {
+            this.$message.error('发布失败')
+          }
+        }).catch(error => {
+          console.log(error)
+        })
+      this.addOrEdit = false
+    },
+    // 自动保存
+    autoSaveArticle() {
+      if (this.article.id != null && this.autoSave && this.article.articleTitle.trim() !== '' &&
+        this.article.articleContent.trim() !== '') {
+        articleAPI.publishArticle(this.article).then(res => {
+          if (res.flag) {
+            this.$message.success('自动保存成功')
+          } else {
+            this.$message.error('自动保存失败')
+          }
+        }).catch(error => {
+          console.log(error)
+        })
+      }
     },
     // 打开对话框
     openModel() {
@@ -356,19 +424,18 @@ export default {
         this.article.tagNameList.push(item.tagName)
       }
     },
-
+    // TODO：上传文件
     beforeUpload() {
 
     },
-
     uploadCover() {
-
-    },
-    // 发布文章
-    saveOrUpdateArticle() {
 
     }
 
+  },
+  destroyed() {
+    // 自动保存
+    this.autoSaveArticle()
   }
 }
 </script>
