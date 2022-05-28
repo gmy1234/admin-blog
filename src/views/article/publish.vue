@@ -102,7 +102,7 @@
           </el-tag>
           <!-- 标签选项 -->
           <el-popover
-            v-if="article.tagNameList.length < 3"
+            v-if="article.tagNameList.length < 5"
             placement="bottom-start"
             width="460"
             trigger="click"
@@ -205,6 +205,10 @@
 </template>
 
 <script>
+import categoryAPI from '@/api/article/category'
+import tagAPI from '@/api/article/tag'
+import articleAPI from '@/api/article/article'
+
 export default {
   name: 'Publish',
   data() {
@@ -254,10 +258,20 @@ export default {
   },
   methods: {
     listCategories() {
-
+      categoryAPI.searchCategories(null)
+        .then(res => {
+          this.categoryList = res.data
+        }).catch(error => {
+          console.log(error)
+        })
     },
     listTags() {
-
+      tagAPI.searchTag(null)
+        .then(res => {
+          this.tagList = res.data
+        }).catch(error => {
+          console.log(error)
+        })
     },
     // 保存草稿
     saveArticleDraft() {
@@ -277,6 +291,7 @@ export default {
       this.listTags()
       this.addOrEdit = true
     },
+    // 上传图片
     uploadImg() {
 
     },
@@ -286,40 +301,60 @@ export default {
       this.article.categoryName = null
     },
     // 搜索文章分类
-    searchCategories() {
-
+    searchCategories(keywords, callback) {
+      categoryAPI.searchCategories(keywords)
+        .then(res => {
+          callback(res.data)
+        })
     },
     // 新添加的保存分类
     saveCategory() {
-
+      if (this.categoryName.trim() !== '') {
+        this.addCategory({
+          categoryName: this.categoryName
+        })
+      }
+      this.categoryName = ''
     },
-    // 选择分类
-    handleSelectCategories() {
-
+    // 分类
+    handleSelectCategories(item) {
+      this.addCategory({ categoryName: this.categoryName })
     },
-    // 添加分类
-    addCategory() {
-
+    // 添加/选择分类
+    addCategory(it) {
+      this.article.categoryName = it.categoryName
     },
 
     // 移除标签
-    removeTag() {
-
+    removeTag(item) {
+      // 获取标签对应的索引
+      const index = this.article.tagNameList.indexOf(item)
+      console.log(index)
+      this.article.tagNameList.splice(index, 1)
     },
     // 搜索标签
-    searchTags() {
-
+    searchTags(keywords, callback) {
+      tagAPI.searchTags(keywords).then(res => {
+        callback(res.data)
+      }).catch(error => {
+        console.log(error)
+      })
     },
     // 保存标签
     saveTag() {
-
+      if (this.tagName.trim() === '') {
+        this.addTag({ tagName: this.tagName })
+      }
+      this.tagName = ''
     },
     // 选择标签
-    handleSelectTag() {
-
+    handleSelectTag(item) {
+      this.addTag({ tageName: item.tagName })
     },
-    addTag() {
-
+    addTag(item) {
+      if (this.article.tagNameList.indexOf(item.tagName) === -1) {
+        this.article.tagNameList.push(item.tagName)
+      }
     },
 
     beforeUpload() {

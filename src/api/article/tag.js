@@ -15,6 +15,15 @@ export default {
       }
     })
   },
+  searchTag(keyword) {
+    return request({
+      url: base + '/search',
+      method: 'get',
+      params: {
+        keywords: keyword
+      }
+    })
+  },
   saveOrUpdateTag(form) {
     return request({
       url: base + '/saveOrUpdateTag',

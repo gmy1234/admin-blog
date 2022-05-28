@@ -15,6 +15,15 @@ export default {
       }
     })
   },
+  searchCategories(keywords) {
+    return request({
+      url: base + '/search',
+      method: 'get',
+      params: {
+        keywords: keywords
+      }
+    })
+  },
   // 删除分类
   deletedCategory(id) {
     return request({
