@@ -3,6 +3,7 @@ import request from '@/utils/request'
 const base = '/admin/article'
 
 export default {
+  // 后台发布文章
   publishArticle(article) {
     return request({
       url: base + '/publish',
@@ -10,6 +11,7 @@ export default {
       data: article
     })
   },
+  // 获取后台的所有文章
   getALlArticle(curren, size, keywords, categoryId, status, tagId, type, isDelete) {
     return request({
       url: base + '/getAll',
@@ -25,7 +27,13 @@ export default {
         isDelete: isDelete
       }
     })
+  },
+  // 通过 ID 获取后台文章详情
+  getArticle(articleId) {
+    return request({
+      url: base + '/getArticle/' + articleId,
+      method: 'get'
+    })
   }
-
 
 }

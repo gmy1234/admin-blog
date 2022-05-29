@@ -257,7 +257,12 @@ export default {
     }
   },
   created() {
+    this.editArticle()
 
+  },
+  destroyed() {
+    // 自动保存
+    this.autoSaveArticle()
   },
   methods: {
     listCategories() {
@@ -317,7 +322,6 @@ export default {
         this.$message.error('文章标签不能为空')
         return false
       }
-
       articleAPI.publishArticle(this.article)
         .then(res => {
           if (res.flag) {
@@ -430,12 +434,24 @@ export default {
     },
     uploadCover() {
 
+    },
+    // 编辑文章时，跳转页面，数据回显
+    editArticle() {
+      const path = this.$route.path
+      console.log(path)
+      const articleId = this.$route.params.id
+      console.log(articleId)
+      if (articleId) {
+        articleAPI.getArticle(articleId).then(res => {
+          this.article = res.data
+        }).catch(error => {
+          console.log(error)
+        })
+      } else {
+
+      }
     }
 
-  },
-  destroyed() {
-    // 自动保存
-    this.autoSaveArticle()
   }
 }
 </script>

@@ -175,6 +175,11 @@ export const constantRoutes = [
         meta: { title: '发布文章', icon: 'table' }
       },
       {
+        path: 'edit/:id',
+        name: '编辑文章',
+        component: () => import('@/views/article/publish')
+      },
+      {
         path: '',
         name: '文章列表',
         component: () => import('@/views/article/list'),

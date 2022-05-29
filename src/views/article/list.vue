@@ -340,6 +340,7 @@ export default {
         }).catch(error => {
           console.log(error)
         })
+      console.log(this.$router)
     },
     // 选择对应的文章类型
     selectType(type) {
@@ -369,8 +370,9 @@ export default {
 
     },
     // 编辑文章
-    editArticle() {
-
+    editArticle(id) {
+      // 动态路由：
+      this.$router.push({ path: '/article/edit/' + `${id}` })
     },
     updateArticleDelete() {
 
