@@ -45,6 +45,12 @@ Vue.filter('date', function(value, formatStr = 'YYYY-MM-DD') {
 Vue.filter('dateTime', function(value, formatStr = 'YYYY-MM-DD HH:mm:ss') {
   return dayjs(value).format(formatStr)
 })
+
+// 远程引用 iconfont 图标
+const sp = document.createElement('script')
+sp.src = '//at.alicdn.com/t/font_3436040_pf0gnbtx15r.js'
+document.body.appendChild(sp)
+
 new Vue({
   el: '#app',
   router,

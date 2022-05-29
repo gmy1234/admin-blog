@@ -248,9 +248,6 @@ export default {
       }
     }
   },
-  created() {
-
-  },
   computed: {
     tagClass() {
       return function(item) {
@@ -258,6 +255,9 @@ export default {
         return index !== -1 ? 'tag-item-select' : 'tag-item'
       }
     }
+  },
+  created() {
+
   },
   methods: {
     listCategories() {
