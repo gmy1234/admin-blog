@@ -10,5 +10,22 @@ export default {
       data: article
     })
   },
+  getALlArticle(curren, size, keywords, categoryId, status, tagId, type, isDelete) {
+    return request({
+      url: base + '/getAll',
+      method: 'get',
+      params: {
+        curren: curren,
+        size: size,
+        keywords: keywords,
+        categoryId: categoryId,
+        status: status,
+        tagId: tagId,
+        type: type,
+        isDelete: isDelete
+      }
+    })
+  }
+
 
 }
