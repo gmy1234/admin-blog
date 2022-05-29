@@ -42,8 +42,14 @@ export default {
       method: 'post',
       data: deleteVo
     })
-  }
-
-
+  },
+  // 设置文章置顶
+  setTop(id, isTop) {
+    return request({
+      url: base + '/top',
+      method: 'post',
+      data: { id, isTop }
+    })
+  },
 
 }

@@ -232,6 +232,18 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 分页 -->
+    <el-pagination
+      class="pagination-container"
+      background
+      :current-page="current"
+      :page-size="size"
+      :total="count"
+      :page-sizes="[5, 10]"
+      layout="total, sizes, prev, pager, next, jumper"
+      @size-change="sizeChange"
+      @current-change="currentChange"
+    />
   </el-card>
 </template>
 
@@ -242,6 +254,7 @@ import tagAPI from '@/api/article/tag'
 import articleAPI from '@/api/article/article'
 
 export default {
+  inject: ['reload'],
   name: 'List',
   components: { Iconfont },
   data() {
@@ -409,8 +422,26 @@ export default {
 
     },
     // 置顶
-    changeTop() {
-
+    changeTop(article) {
+      console.log(article)
+      articleAPI.setTop(article.id, article.isTop)
+        .then(res => {
+          if (res.flag) {
+            this.$notify.success({
+              title: '成功',
+              message: '置顶成功'
+            })
+            this.reload()
+          } else {
+            this.$notify.error({
+              title: '失败',
+              message: res.message
+            })
+          }
+        }).catch(error => {
+          console.log(error)
+        })
+      this.remove = false
     },
     // 编辑文章
     editArticle(id) {
@@ -441,6 +472,17 @@ export default {
     // 彻底删除
     deleteArticles() {
 
+    },
+
+    // 页大小
+    sizeChange(size) {
+      this.size = size
+      this.listArticles()
+    },
+    // 当前页码
+    currentChange(current) {
+      this.current = current
+      this.listArticles()
     }
 
   }
