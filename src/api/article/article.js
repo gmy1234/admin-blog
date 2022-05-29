@@ -34,6 +34,16 @@ export default {
       url: base + '/getArticle/' + articleId,
       method: 'get'
     })
+  },
+  // 逻辑删除文章
+  deleteArticles(deleteVo) {
+    return request({
+      url: base + '/deleteArticles',
+      method: 'post',
+      data: deleteVo
+    })
   }
+
+
 
 }

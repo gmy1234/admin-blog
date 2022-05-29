@@ -4,12 +4,15 @@
     <!-- 文章状态 -->
     <div class="article-status-menu">
       <el-button type="info" circle @click="selectType('all')">
-        <Iconfont type="home" />全部
+        <Iconfont type="home" />
+        全部
       </el-button>
-      <el-button type="primary" icon="el-icon-edit" circle @click="selectType('public')">公开</el-button>
-      <el-button type="success" icon="el-icon-view" circle @click="selectType('secret')">私密</el-button>
-      <el-button type="warning" icon="el-icon-message" circle @click="selectType('draft')">草稿箱</el-button>
-      <el-button type="danger" icon="el-icon-delete" circle @click="selectType('delete')">回收站</el-button>
+      <el-button type="primary" icon="el-icon-edit" plain @click="selectType('public')">公开</el-button>
+      <el-button type="success" icon="el-icon-view" plain @click="selectType('secret')">私密</el-button>
+      <el-button type="warning" icon="el-icon-message" plain @click="selectType('draft')">草稿箱</el-button>
+      <el-button type="danger" icon="el-icon-delete" plain :class="isActive('delete')" @click="selectType('delete')">
+        回收站
+      </el-button>
     </div>
     <!-- 表格操作 -->
     <div class="operation-container">
@@ -237,6 +240,7 @@ import Iconfont from '@/components/Iconfont'
 import categoryAPI from '@/api/article/category'
 import tagAPI from '@/api/article/tag'
 import articleAPI from '@/api/article/article'
+
 export default {
   name: 'List',
   components: { Iconfont },
@@ -299,6 +303,33 @@ export default {
           name: name
         }
       }
+    },
+    isActive() {
+      return function(status) {
+        return this.activeStatus === status ? 'active-status' : 'status'
+      }
+    }
+  },
+  watch: {
+    type() {
+      this.current = 1
+      this.listArticles()
+    },
+    categoryId() {
+      this.current = 1
+      this.listArticles()
+    },
+    tagId() {
+      this.current = 1
+      this.listArticles()
+    },
+    status() {
+      this.current = 1
+      this.listArticles()
+    },
+    isDelete() {
+      this.current = 1
+      this.listArticles()
     }
   },
   created() {
@@ -346,16 +377,28 @@ export default {
     selectType(type) {
       switch (type) {
         case 'all':
+          this.isDelete = 0
+          this.status = null
           break
         case 'draft':
+          this.isDelete = 0
+          this.status = 3
           break
         case 'public':
+          this.isDelete = 0
+          this.status = 1
           break
         case 'secret':
+          this.isDelete = 0
+          this.status = 2
           break
         case 'delete':
+          this.isDelete = 1
+          this.status = null
           break
       }
+      this.current = 1
+      this.activeStatus = type
     },
     // 搜索文章
     searchArticles() {
@@ -374,8 +417,22 @@ export default {
       // 动态路由：
       this.$router.push({ path: '/article/edit/' + `${id}` })
     },
-    updateArticleDelete() {
-
+    updateArticleDelete(id) {
+      const param = {}
+      if (id != null) {
+        param.idList = [id]
+      } else {
+        param.idList = this.articleIdList
+      }
+      param.isDelete = this.isDelete === 0 ? 1 : 0
+      articleAPI.deleteArticles(param).then(res => {
+        if (res.flag) {
+          this.$message.success('成功')
+          this.listArticles()
+        }
+      }).catch(error => {
+        console.log(error)
+      })
     },
     // 恢复文章
     recoverArticleDelete() {
@@ -411,7 +468,6 @@ export default {
 
 .active-status {
   cursor: pointer;
-  color: #333;
   font-weight: bold;
 }
 
