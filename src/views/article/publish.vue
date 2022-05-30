@@ -160,7 +160,7 @@
           <el-upload
             class="upload-cover"
             drag
-            action="/api/admin/articles/images"
+            :action="baseURL"
             multiple
             :before-upload="beforeUpload"
             :on-success="uploadCover"
@@ -169,12 +169,7 @@
             <div v-if="article.articleCover === ''" class="el-upload__text">
               将文件拖到此处，或<em>点击上传</em>
             </div>
-            <img
-              v-else
-              :src="article.articleCover"
-              width="360px"
-              height="180px"
-            >
+            <img v-else :src="article.articleCover" width="360px" height="180px">
           </el-upload>
         </el-form-item>
         <el-form-item label="置顶">
@@ -208,6 +203,9 @@
 import categoryAPI from '@/api/article/category'
 import tagAPI from '@/api/article/tag'
 import articleAPI from '@/api/article/article'
+import uploadAPI from '@/api/util/upload'
+import * as imageConversion from 'image-conversion'
+import * as constants from '../../utils/constants'
 
 export default {
   name: 'Publish',
@@ -245,7 +243,8 @@ export default {
         isTop: 0, // 是否置顶
         type: 1,
         status: 1
-      }
+      },
+      baseURL: 'http://localhost:8000/api/admin/upload/articles/images'
     }
   },
   computed: {
@@ -258,7 +257,6 @@ export default {
   },
   created() {
     this.editArticle()
-
   },
   destroyed() {
     // 自动保存
@@ -363,12 +361,55 @@ export default {
       this.listTags()
       this.addOrEdit = true
     },
-    // 上传图片
-    uploadImg() {
+    // 上传封面
+    uploadCover(response) {
+      this.article.articleCover = response.data
+      console.log('uploadCover')
+    },
 
+    // 上传图片之前压缩文件大小
+    beforeUpload(file) {
+      console.log(file)
+      const c = new Promise(resolve => {
+        if (file.size / 1024 < constants.UPLOAD_SIZE) {
+          resolve(file)
+        }
+        // 压缩到200KB,这里的200就是要压缩的大小,可自定义
+        imageConversion.compressAccurately(file, constants.UPLOAD_SIZE)
+          .then(res => {
+            resolve(res)
+          })
+      })
+      console.log(c)
+      return c
+    },
+    // 文章编辑器上传图片
+    uploadImg(pos, file) {
+      const formData = new FormData()
+      // 文件大小 < 200kb
+      if (file.size / 1024 < constants.UPLOAD_SIZE) {
+        formData.append('file', file)
+        uploadAPI.uploadArticleImages(formData)
+          .then(res => {
+            this.$refs.md.$img2Url(pos, res.data)
+          })
+      } else {
+        // 压缩到200KB,这里的200就是要压缩的大小,可自定义
+        imageConversion.compressAccurately(file, constants.UPLOAD_SIZE)
+          .then(res => {
+            formData.append(
+              'file',
+              new window.File([res], file.name, { type: file.type })
+            )
+            uploadAPI.uploadArticleImages(formData).then(res => {
+              this.$refs.md.$img2Url(pos, res.data)
+            })
+          }).catch(error => {
+            console.log(error)
+          })
+      }
     },
     // 以下是发布文章对话框里的方法： --------------------0.0----------------------
-    //
     removeCategory() {
       this.article.categoryName = null
     },
@@ -428,27 +469,16 @@ export default {
         this.article.tagNameList.push(item.tagName)
       }
     },
-    // TODO：上传文件
-    beforeUpload() {
-
-    },
-    uploadCover() {
-
-    },
     // 编辑文章时，跳转页面，数据回显
     editArticle() {
-      const path = this.$route.path
-      console.log(path)
+      // 获取路由中的 ID
       const articleId = this.$route.params.id
-      console.log(articleId)
       if (articleId) {
         articleAPI.getArticle(articleId).then(res => {
           this.article = res.data
         }).catch(error => {
           console.log(error)
         })
-      } else {
-
       }
     }
 
