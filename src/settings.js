@@ -1,6 +1,9 @@
 module.exports = {
 
-  title: 'Vue Admin Template',
+  /**
+   * Vue 页面标题
+   */
+  title: '博客后台管理系统',
 
   /**
    * @type {boolean} true | false
