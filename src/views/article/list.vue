@@ -217,7 +217,7 @@
           <el-popconfirm
             v-if="scope.row.isDelete === 1"
             title="确定恢复吗？"
-            @confirm="recoverArticleDelete(scope.row.id)"
+            @confirm="updateArticleDelete(scope.row.id)"
           >
             <el-button slot="reference" size="mini" type="success">恢复</el-button>
           </el-popconfirm>
@@ -244,6 +244,32 @@
       @size-change="sizeChange"
       @current-change="currentChange"
     />
+    <!-- 批量逻辑删除对话框 -->
+    <el-dialog :visible.sync="updateIsDelete" width="30%">
+      <div slot="title" class="dialog-title-container">
+        <i class="el-icon-warning" style="color:#ff9900" />提示
+      </div>
+      <div style="font-size:1rem">是否删除选中项？</div>
+      <div slot="footer">
+        <el-button @click="updateIsDelete = false">取 消</el-button>
+        <el-button type="primary" @click="updateArticleDelete(null)">
+          确 定
+        </el-button>
+      </div>
+    </el-dialog>
+    <!-- 批量彻底删除对话框 -->
+    <el-dialog :visible.sync="remove" width="30%">
+      <div slot="title" class="dialog-title-container">
+        <i class="el-icon-warning" style="color:#ff9900" />提示
+      </div>
+      <div style="font-size:1rem">是否彻底删除选中项？</div>
+      <div slot="footer">
+        <el-button @click="remove = false">取 消</el-button>
+        <el-button type="primary" @click="deleteArticles(null)">
+          确 定
+        </el-button>
+      </div>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -415,7 +441,8 @@ export default {
     },
     // 搜索文章
     searchArticles() {
-
+      this.current = 1
+      this.listArticles()
     },
     // 选择对应的文章
     selectionChange() {
@@ -455,6 +482,7 @@ export default {
       } else {
         param.idList = this.articleIdList
       }
+      console.log(param)
       param.isDelete = this.isDelete === 0 ? 1 : 0
       articleAPI.deleteArticles(param).then(res => {
         if (res.flag) {
@@ -465,13 +493,32 @@ export default {
         console.log(error)
       })
     },
-    // 恢复文章
-    recoverArticleDelete() {
-
-    },
-    // 彻底删除
-    deleteArticles() {
-
+    // （逻辑）彻底删除
+    deleteArticles(id) {
+      let data = { }
+      if (id == null) {
+        data = { idList: this.articleIdList }
+      } else {
+        data = { idList: [id] }
+      }
+      console.log(data)
+      data.isDelete = this.isDelete
+      articleAPI.phyDeleteArticles(data).then(res => {
+        if (res.flag) {
+          this.$notify.success({
+            title: '成功',
+            message: res.message
+          })
+          this.listArticles()
+        } else {
+          this.$notify.error({
+            title: '失败',
+            message: data.message
+          })
+        }
+      }).catch(error => {
+        console.log(error)
+      })
     },
 
     // 页大小

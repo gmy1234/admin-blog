@@ -51,5 +51,14 @@ export default {
       data: { id, isTop }
     })
   },
+  // 物理删除文章
+  phyDeleteArticles(ids) {
+    return request({
+      url: base + '/phyDeleteArticles',
+      method: 'post',
+      data: ids
+    })
+  },
+
 
 }
