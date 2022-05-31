@@ -1,7 +1,8 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">name: {{ name }}</div>
-    <div>OKKK</div>
+    <div>首页</div>
+    <div>访问量</div>
   </div>
 </template>
 
