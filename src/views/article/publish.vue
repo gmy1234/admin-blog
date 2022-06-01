@@ -259,8 +259,7 @@ export default {
     this.editArticle()
   },
   destroyed() {
-    // 自动保存
-    this.autoSaveArticle()
+    // 自动保存 this.autoSaveArticle()
   },
   methods: {
     listCategories() {
