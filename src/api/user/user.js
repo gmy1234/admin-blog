@@ -21,6 +21,17 @@ export default {
       url: base + '/getRole',
       method: 'get'
     })
+  },
+  online(current, size, keywords) {
+    return request({
+      url: base + '/online',
+      method: 'get',
+      params: {
+        current: this.current,
+        size: this.size,
+        keywords: this.keywords
+      }
+    })
   }
 
 }
