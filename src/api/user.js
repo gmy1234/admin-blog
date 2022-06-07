@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { getToken } from '@/utils/auth'
 
 // 系统 原来的
 // export function login(data) {
@@ -11,7 +12,7 @@ import request from '@/utils/request'
 
 export function login(data) {
   return request({
-    url: '/user/login',
+    url: '/admin/user/login',
     method: 'post',
     data
   })
@@ -19,15 +20,18 @@ export function login(data) {
 
 export function getInfo(token) {
   return request({
-    url: '/user/info',
+    url: '/admin/user/info',
     method: 'get',
     params: { token }
   })
 }
 
 export function logout() {
+  const userToken = getToken()
+  console.log(userToken)
   return request({
-    url: '/vue-admin-template/user/logout',
-    method: 'post'
+    url: '/admin/user/logout',
+    method: 'post',
+    header: { token: userToken }
   })
 }

@@ -1,14 +1,13 @@
 <template>
-  <div class="login-container">
+  <div class="login-container background-gmy">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-
-      <div class="title-container">
+      <div class="title-container" style="bottom: 58px;">
         <h3 class="title">Login Form</h3>
       </div>
 
       <el-form-item prop="username">
         <span class="svg-container">
-          <svg-icon icon-class="user" />
+          <svg-icon icon-class="user"/>
         </span>
         <el-input
           ref="username"
@@ -23,7 +22,7 @@
 
       <el-form-item prop="password">
         <span class="svg-container">
-          <svg-icon icon-class="password" />
+          <svg-icon icon-class="password"/>
         </span>
         <el-input
           :key="passwordType"
@@ -37,18 +36,21 @@
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"/>
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
-
-      <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
-      </div>
-
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">
+        Login
+      </el-button>
     </el-form>
+    <el-col type="flex" align="middle">
+      <el-row span="24">
+        <div style="color:red"> <el-avatar size="large" src=""></el-avatar></div>
+      </el-row>
+      <el-row span="24">
+        <div class="font" >欢迎光临，只下擦飞馆</div></el-row>
+    </el-col>
   </div>
 </template>
 
@@ -75,7 +77,7 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: '111111'
+        password: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -129,8 +131,8 @@ export default {
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-$bg:#283443;
-$light_gray:#fff;
+$bg: #283443;
+$light_gray: #fff;
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
@@ -173,9 +175,9 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
 
 .login-container {
   min-height: 100%;
@@ -233,5 +235,17 @@ $light_gray:#eee;
     cursor: pointer;
     user-select: none;
   }
+}
+
+.background-gmy {
+  background-image: url(https://telegram.org/img/tgme/pattern.svg);
+}
+
+.font{
+  font-size: 26px;
+  color: $light_gray;
+  margin: 0px auto 40px auto;
+  text-align: center;
+  font-weight: bold;
 }
 </style>
