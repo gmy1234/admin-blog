@@ -199,6 +199,22 @@ export const constantRoutes = [
     ]
   },
 
+  // 文章管理路由
+  {
+    path: '/wallpaper',
+    component: Layout,
+    name: '壁纸管理',
+    meta: { title: '壁纸管理', icon: 'el-icon-picture' },
+    children: [
+      {
+        path: 'list',
+        name: '壁纸列表',
+        component: () => import('@/views/wallpaper/list'),
+        meta: { title: '壁纸列表', icon: 'el-icon-picture-outline' }
+      },
+    ]
+  },
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
