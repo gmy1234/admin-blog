@@ -207,11 +207,15 @@ export const constantRoutes = [
     meta: { title: '壁纸管理', icon: 'el-icon-picture' },
     children: [
       {
-        path: 'list',
-        name: '壁纸列表',
-        component: () => import('@/views/wallpaper/list'),
+        path: 'album',
+        name: '相册列表',
+        component: () => import('@/views/wallpaper/album'),
         meta: { title: '壁纸列表', icon: 'el-icon-picture-outline' }
       },
+      {
+        path: 'album/:id',
+        component: () => import('@/views/wallpaper/photo')
+      }
     ]
   },
 

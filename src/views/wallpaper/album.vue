@@ -41,9 +41,9 @@
       </div>
     </div>
     <!-- 相册列表 -->
-    <el-row v-loading="loading" class="album-container" :gutter="12">
+    <el-row :loading="loading" class="album-container" :gutter="12">
       <!-- 空状态 -->
-      <el-empty v-if="albumList == null" description="暂无相册" />
+      <el-empty v-if="albumList === null" description="暂无相册" />
       <el-col v-for="item of albumList" :key="item.id" :md="6">
         <div class="album-item" @click="checkPhoto(item)">
           <!-- 相册操作 -->
@@ -148,7 +148,7 @@ import * as imageConversion from 'image-conversion'
 import albumAPI from '../../api/album'
 
 export default {
-  name: 'List',
+  name: 'Album',
   data() {
     return {
       keywords: '',
@@ -189,21 +189,20 @@ export default {
       }
       this.addOrEdit = true
     },
+    // 选择指定的相册，跳转到相册里去
     checkPhoto(item) {
-      this.$router.push({ path: '/albums/' + item.id })
+      console.log(item.id)
+      this.$router.push({ path: '/wallpaper/album/' + item.id })
     },
     checkDelete() {
       this.$router.push({ path: '/photos/delete' })
     },
     listAlbums() {
-      console.log('相册API')
       albumAPI.listPhotoAlbums().then(res => {
-        console.log(res)
         this.albumList = res.data
         this.count = res.data.count
         this.loading = false
       })
-      console.log(this.albumList)
     },
     addOrEditAlbum() {
       if (this.albumForum.albumName.trim() === '') {
