@@ -11,10 +11,11 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission'
-import dayjs from 'dayjs'; // permission control
+import dayjs from 'dayjs' // permission control
 import './assets/css/index.css' // 引入全局样式
-import mavonEditor from "mavon-editor";
-import "mavon-editor/dist/css/index.css";
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+import ECharts from 'echarts'
 
 /**
  * If you don't want to use mock-server
@@ -34,6 +35,7 @@ Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
 Vue.use(mavonEditor)
+Vue.component('v-chart', ECharts)
 
 Vue.config.productionTip = false
 Vue.prototype.$moment = dayjs // 引入dayjs

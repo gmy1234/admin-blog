@@ -2,7 +2,7 @@
   <div class="login-container background-gmy">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <div class="title-container" style="bottom: 58px;">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">进园门票</h3>
       </div>
 
       <el-form-item prop="username">
@@ -41,15 +41,17 @@
       </el-form-item>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">
-        Login
+        爷来了
       </el-button>
     </el-form>
     <el-col type="flex" align="middle">
-      <el-row span="24">
-        <div style="color:red"> <el-avatar size="large" src=""></el-avatar></div>
+      <el-row span="24" style="padding-bottom: 50px ">
+        <div><el-avatar :size="200" class="background-syy"></el-avatar></div>
       </el-row>
       <el-row span="24">
-        <div class="font" >欢迎光临，只下擦飞馆</div></el-row>
+        <div class="font">欢迎光临，爷得游乐园</div>
+        <div class="font">🎉🎉🎉🎉  👴🉐️🎠🎢🏀  😎</div>
+      </el-row>
     </el-col>
   </div>
 </template>
@@ -239,6 +241,9 @@ $light_gray: #eee;
 
 .background-gmy {
   background-image: url(https://telegram.org/img/tgme/pattern.svg);
+}
+.background-syy{
+  background-image: url(http://blog-gmy.oss-cn-hangzhou.aliyuncs.com/articles/ee3cd0ea752a61e9c88fcd4aa04dc13a.jpeg)
 }
 
 .font{
