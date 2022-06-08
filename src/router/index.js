@@ -199,7 +199,7 @@ export const constantRoutes = [
     ]
   },
 
-  // 文章管理路由
+  // 相册管理路由
   {
     path: '/wallpaper',
     component: Layout,
@@ -214,7 +214,13 @@ export const constantRoutes = [
       },
       {
         path: 'album/:id',
+        name: '图片管理',
         component: () => import('@/views/wallpaper/photo')
+      },
+      {
+        path: 'delete',
+        name: '回收站',
+        component: () => import('@/views/wallpaper/delete')
       }
     ]
   },

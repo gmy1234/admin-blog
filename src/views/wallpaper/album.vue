@@ -43,28 +43,28 @@
     <!-- 相册列表 -->
     <el-row :loading="loading" class="album-container" :gutter="12">
       <!-- 空状态 -->
-      <el-empty v-if="albumList === null" description="暂无相册"/>
+      <el-empty v-if="albumList === null" description="暂无相册" />
       <el-col v-for="item of albumList" :key="item.id" :md="6">
         <div class="album-item" @click="checkPhoto(item)">
           <!-- 相册操作 -->
           <div class="album-opreation">
             <el-dropdown @command="handleCommand">
-              <i class="el-icon-more" style="color:#fff"/>
+              <i class="el-icon-more" style="color:#fff" />
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item :command="'update' + JSON.stringify(item)">
-                  <i class="el-icon-edit"/>编辑
+                  <i class="el-icon-edit" />编辑
                 </el-dropdown-item>
                 <el-dropdown-item :command="'delete' + item.id">
-                  <i class="el-icon-delete"/>删除
+                  <i class="el-icon-delete" />删除
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
           <div class="album-photo-count">
             <div>{{ item.photoCount }}</div>
-            <i v-if="item.status === 2" class="iconfont el-icon-mymima"/>
+            <i v-if="item.status === 2" class="iconfont el-icon-mymima" />
           </div>
-          <el-image fit="cover" class="album-cover" :src="item.albumCover"/>
+          <el-image fit="cover" class="album-cover" :src="item.albumCover" />
           <div class="album-name">{{ item.albumName }}</div>
         </div>
       </el-col>
@@ -82,13 +82,13 @@
     />
     <!-- 新增/修改模态框 -->
     <el-dialog :visible.sync="addOrEdit" width="35%" top="10vh">
-      <div slot="title" ref="albumTitle" class="dialog-title-container"/>
+      <div slot="title" ref="albumTitle" class="dialog-title-container" />
       <el-form label-width="80px" size="medium" :model="albumForum">
         <el-form-item label="相册名称">
-          <el-input v-model="albumForum.albumName" style="width:220px"/>
+          <el-input v-model="albumForum.albumName" style="width:220px" />
         </el-form-item>
         <el-form-item label="相册描述">
-          <el-input v-model="albumForum.albumDesc" style="width:220px"/>
+          <el-input v-model="albumForum.albumDesc" style="width:220px" />
         </el-form-item>
         <el-form-item label="相册封面">
           <el-upload
@@ -100,7 +100,7 @@
             multiple
             :on-success="uploadCover"
           >
-            <i v-if="albumForum.albumCover === ''" class="el-icon-upload"/>
+            <i v-if="albumForum.albumCover === ''" class="el-icon-upload" />
             <div v-if="albumForum.albumCover === ''" class="el-upload__text">
               将文件拖到此处，或<em>点击上传</em>
             </div>
@@ -124,7 +124,7 @@
     <!-- 删除对话框 -->
     <el-dialog :visible.sync="isDelete" width="30%">
       <div slot="title" class="dialog-title-container">
-        <i class="el-icon-warning" style="color:#ff9900"/>提示
+        <i class="el-icon-warning" style="color:#ff9900" />提示
       </div>
       <div style="font-size:1rem">是否删除该相册？</div>
       <div slot="footer">
@@ -191,7 +191,7 @@ export default {
       this.$router.push({ path: '/wallpaper/album/' + item.id })
     },
     checkDelete() {
-      this.$router.push({ path: '/photos/delete' })
+      this.$router.push({ path: '/wallpaper/delete' })
     },
     listAlbums() {
       AlbumAPI.listPhotoAlbums().then(res => {
@@ -257,14 +257,28 @@ export default {
       const data = command.substring(6)
       if (type === 'delete') {
         this.albumForum.id = data
-        this.isdelete = true
+        this.isDelete = true
       } else {
         console.log(data)
         this.openModel(data)
       }
     },
     deleteAlbum() {
-
+      AlbumAPI.delete(this.albumForum.id).then(res => {
+        if (res.flag) {
+          this.$notify.success({
+            title: '成功',
+            message: res.message
+          })
+          this.isDelete = false
+          this.listAlbums()
+        } else {
+          this.$notify.error({
+            title: '失败',
+            message: res.message
+          })
+        }
+      })
     },
     searchAlbums() {
       this.current = 1

@@ -37,5 +37,12 @@ export default {
         keywords: keywords
       }
     })
+  },
+  // 删除 相册
+  delete(id) {
+    return request({
+      url: base + '/delete/' + id,
+      method: 'get'
+    })
   }
 }

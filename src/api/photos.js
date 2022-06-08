@@ -4,7 +4,7 @@ const base = '/admin/wallpaper'
 
 export default {
   // 获取照片列表
-  listPhotos(current, size, albumId) {
+  listPhotos(current, size, albumId, isDelete) {
     return request({
       url: base + '/photos',
       method: 'get',
@@ -12,7 +12,7 @@ export default {
         current: current,
         size: size,
         albumId: albumId,
-        isDelete: 0
+        isDelete: isDelete
       }
     })
   },
@@ -22,6 +22,6 @@ export default {
       method: 'post',
       data: photoData
     })
-  },
+  }
 
 }
