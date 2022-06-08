@@ -10,6 +10,12 @@ export default {
       url: base + '/list',
       method: 'get'
     })
-  }
-
+  },
+  // 根据ID获取相册信息
+  getAlbumInfoById(albumId) {
+    return request({
+      url: base + '/info/' + albumId,
+      method: 'get'
+    })
+  },
 }

@@ -233,6 +233,8 @@
 </template>
 
 <script>
+import AlbumAPI from '@/api/album'
+import PhotoApi from '@/api/photos'
 export default {
   name: 'Photo',
   data() {
@@ -269,23 +271,33 @@ export default {
   },
   watch: {
     photoList() {
-      this.photoIdList = [];
+      this.photoIdList = []
       this.photoList.forEach(item => {
-        this.photoIdList.push(item.id);
-      });
+        this.photoIdList.push(item.id)
+      })
     }
   },
   created() {
     this.getAlbumInfo()
+    this.listPhotos()
   },
   methods: {
     getAlbumInfo() {
-
+      const albumId = this.$route.params.id
+      console.log(albumId)
+      AlbumAPI.getAlbumInfoById(albumId).then(res => {
+        this.albumInfo = res.data
+      })
     },
     listAlbums() {
 
     },
     listPhotos() {
+      PhotoApi.listPhotos(this.current, this.size, this.albumId, 0).then(res => {
+        this.photoList = res.data.recordList
+        this.count = res.data.count
+        this.loading = false
+      })
 
     },
     sizeChange(size) {
