@@ -18,4 +18,12 @@ export default {
       method: 'get'
     })
   },
+  // 修改或者保存相册信息
+  saveOrUpdate(albumData) {
+    return request({
+      url: base + '/saveOrUpdate',
+      method: 'post',
+      data: albumData
+    })
+  },
 }

@@ -158,9 +158,7 @@
     </el-dialog>
     <!-- 编辑对话框 -->
     <el-dialog :visible.sync="editPhoto" width="30%">
-      <div slot="title" class="dialog-title-container">
-        修改信息
-      </div>
+      <div slot="title" class="dialog-title-container">修改信息</div>
       <el-form label-width="80px" size="medium" :model="photoForm">
         <el-form-item label="照片名称">
           <el-input v-model="photoForm.photoName" style="width:220px" />
@@ -171,9 +169,7 @@
       </el-form>
       <div slot="footer">
         <el-button @click="editPhoto = false">取 消</el-button>
-        <el-button type="primary" @click="updatePhoto">
-          确 定
-        </el-button>
+        <el-button type="primary" @click="updatePhoto">确 定</el-button>
       </div>
     </el-dialog>
     <!-- 批量删除对话框 -->
@@ -287,7 +283,6 @@ export default {
   methods: {
     getAlbumInfo() {
       const albumId = this.$route.params.id
-      console.log(albumId)
       AlbumAPI.getAlbumInfoById(albumId).then(res => {
         this.albumInfo = res.data
       })
@@ -296,7 +291,8 @@ export default {
 
     },
     listPhotos() {
-      PhotoApi.listPhotos(this.current, this.size, this.albumId, 0).then(res => {
+      this.albumId = this.$route.params.id
+      PhotoApi.listPhotos(this.current, this.size, this.albumId).then(res => {
         this.photoList = res.data.recordList
         this.count = res.data.count
         this.loading = false
@@ -346,7 +342,7 @@ export default {
       })
     },
     upload(response) {
-      console.log("上传的")
+      console.log('上传的')
       console.log(response)
       this.uploadList.push({ url: response.data })
     },
@@ -380,7 +376,7 @@ export default {
       this.editPhoto = true
     },
     updatePhotoDelete(id) {
-      let param = {}
+      let param = { }
       if (id == null) {
         param = { idList: this.selectPhotoIdList, isDelete: 1 }
       } else {

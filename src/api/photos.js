@@ -11,7 +11,7 @@ export default {
       params: {
         current: current,
         size: size,
-        album: albumId,
+        albumId: albumId,
         isDelete: 0
       }
     })
