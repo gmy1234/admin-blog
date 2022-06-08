@@ -26,4 +26,16 @@ export default {
       data: albumData
     })
   },
+  // 搜索相册
+  searchAlbums(current, size, keywords) {
+    return request({
+      url: base + '/search',
+      method: 'get',
+      params: {
+        current: current,
+        size: size,
+        keywords: keywords
+      }
+    })
+  }
 }

@@ -268,7 +268,11 @@ export default {
     },
     searchAlbums() {
       this.current = 1
-      this.listAlbums()
+      AlbumAPI.searchAlbums(this.current, this.size, this.keywords).then(res => {
+        this.albumList = res.data.recordList
+        this.count = res.data.count
+        this.loading = false
+      })
     },
     sizeChange(size) {
       this.size = size
