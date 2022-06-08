@@ -16,9 +16,18 @@ export default {
       }
     })
   },
+  // 保存图片
   savePhotos(photoData) {
     return request({
       url: base + '/uploadPhotos',
+      method: 'post',
+      data: photoData
+    })
+  },
+  // 移动图片
+  movePhotos(photoData) {
+    return request({
+      url: base + '/moveOtherAlbum',
       method: 'post',
       data: photoData
     })
