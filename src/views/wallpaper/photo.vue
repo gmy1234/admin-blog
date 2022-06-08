@@ -28,8 +28,8 @@
       <div class="operation">
         <div class="all-check">
           <el-checkbox
-            :indeterminate="isIndeterminate"
             v-model="checkAll"
+            :indeterminate="isIndeterminate"
             @change="handleCheckAllChange"
           >
             全选
@@ -38,33 +38,33 @@
         </div>
         <el-button
           type="success"
-          @click="movePhoto = true"
           :disabled="selectPhotoIdList.length == 0"
           size="small"
           icon="el-icon-deleteItem"
+          @click="movePhoto = true"
         >
           移动到
         </el-button>
         <el-button
           type="danger"
-          @click="batchDeletePhoto = true"
           :disabled="selectPhotoIdList.length == 0"
           size="small"
           icon="el-icon-deleteItem"
+          @click="batchDeletePhoto = true"
         >
           批量删除
         </el-button>
       </div>
     </div>
     <!-- 照片列表 -->
-    <el-row class="photo-container" :gutter="10" v-loading="loading">
+    <el-row v-loading="loading" class="photo-container" :gutter="10">
       <!-- 空状态 -->
       <el-empty v-if="photoList.length == 0" description="暂无照片" />
       <el-checkbox-group
         v-model="selectPhotoIdList"
         @change="handleCheckedPhotoChange"
       >
-        <el-col :md="4" v-for="item of photoList" :key="item.id">
+        <el-col v-for="item of photoList" :key="item.id" :md="4">
           <el-checkbox :label="item.id">
             <div class="photo-item">
               <!-- 照片操作 -->
@@ -82,7 +82,7 @@
                 fit="cover"
                 class="photo-img"
                 :src="item.photoSrc"
-                :preview-photoSrc-list="photoList"
+                :preview-photo-src-list="photoList"
               />
               <div class="photo-name">{{ item.photoName }}</div>
             </div>
@@ -94,23 +94,23 @@
     <el-pagination
       :hide-on-single-page="true"
       class="pagination-container"
-      @size-change="sizeChange"
-      @current-change="currentChange"
       :current-page="current"
       :page-size="size"
       :total="count"
       layout="prev, pager, next"
+      @size-change="sizeChange"
+      @current-change="currentChange"
     />
     <!-- 上传模态框 -->
     <el-dialog :visible.sync="uploadPhoto" width="70%" top="10vh">
-      <div class="dialog-title-container" slot="title">
+      <div slot="title" class="dialog-title-container">
         上传照片
       </div>
       <!-- 上传 -->
       <div class="upload-container">
         <el-upload
           v-show="uploadList.length > 0"
-          action="/api/admin/photos/albums/cover"
+          :action="baseURL"
           list-type="picture-card"
           :file-list="uploadList"
           multiple
@@ -122,19 +122,19 @@
         </el-upload>
         <div class="upload">
           <el-upload
-            v-show="uploadList.length == 0"
+            v-show="uploadList.length === 0"
             drag
-            action="/api/admin/photos/albums/cover"
+            :action="baseURL"
             multiple
             :before-upload="beforeUpload"
             :on-success="upload"
             :show-file-list="false"
           >
-            <i class="el-icon-upload"></i>
+            <i class="el-icon-upload" />
             <div class="el-upload__text">
               将文件拖到此处，或<em>点击上传</em>
             </div>
-            <div class="el-upload__tip" slot="tip">
+            <div slot="tip" class="el-upload__tip">
               支持上传jpg/png文件
             </div>
           </el-upload>
@@ -146,9 +146,9 @@
           <div style="margin-left:auto">
             <el-button @click="uploadPhoto = false">取 消</el-button>
             <el-button
-              @click="savePhotos"
               type="primary"
               :disabled="uploadList.length === 0"
+              @click="savePhotos"
             >
               开始上传
             </el-button>
@@ -158,15 +158,15 @@
     </el-dialog>
     <!-- 编辑对话框 -->
     <el-dialog :visible.sync="editPhoto" width="30%">
-      <div class="dialog-title-container" slot="title">
+      <div slot="title" class="dialog-title-container">
         修改信息
       </div>
       <el-form label-width="80px" size="medium" :model="photoForm">
         <el-form-item label="照片名称">
-          <el-input style="width:220px" v-model="photoForm.photoName" />
+          <el-input v-model="photoForm.photoName" style="width:220px" />
         </el-form-item>
         <el-form-item label="照片描述">
-          <el-input style="width:220px" v-model="photoForm.photoDesc" />
+          <el-input v-model="photoForm.photoDesc" style="width:220px" />
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -178,7 +178,7 @@
     </el-dialog>
     <!-- 批量删除对话框 -->
     <el-dialog :visible.sync="batchDeletePhoto" width="30%">
-      <div class="dialog-title-container" slot="title">
+      <div slot="title" class="dialog-title-container">
         <i class="el-icon-warning" style="color:#ff9900" />提示
       </div>
       <div style="font-size:1rem">是否删除选中照片？</div>
@@ -191,7 +191,7 @@
     </el-dialog>
     <!-- 移动对话框 -->
     <el-dialog :visible.sync="movePhoto" width="30%">
-      <div class="dialog-title-container" slot="title">
+      <div slot="title" class="dialog-title-container">
         移动照片
       </div>
       <el-empty v-if="albumList.length < 2" description="暂无其他相册" />
@@ -235,6 +235,8 @@
 <script>
 import AlbumAPI from '@/api/album'
 import PhotoApi from '@/api/photos'
+import * as imageConversion from 'image-conversion'
+import * as constants from '../../utils/constants'
 export default {
   name: 'Photo',
   data() {
@@ -253,20 +255,21 @@ export default {
       albumList: [],
       albumInfo: {
         id: null,
-        albumName: "",
-        albumDesc: "",
-        albumCover: "",
+        albumName: '',
+        albumDesc: '',
+        albumCover: '',
         photoCount: 0
       },
       photoForm: {
         id: null,
-        photoName: "",
-        photoDesc: ""
+        photoName: '',
+        photoDesc: ''
       },
       albumId: null,
       current: 1,
       size: 18,
-      count: 0
+      count: 0,
+      baseURL: 'http://localhost:8000/api/admin/album/uploadCover'
     }
   },
   watch: {
@@ -298,18 +301,36 @@ export default {
         this.count = res.data.count
         this.loading = false
       })
-
     },
     sizeChange(size) {
-      this.size = size;
-      this.listPhotos();
+      this.size = size
+      this.listPhotos()
     },
     currentChange(current) {
-      this.current = current;
-      this.listPhotos();
+      this.current = current
+      this.listPhotos()
     },
     savePhotos() {
-
+      const photoUrlList = []
+      this.uploadList.forEach(item => {
+        photoUrlList.push(item.url)
+      })
+      const photoData = {
+        albumId: this.$route.params.id,
+        photoUrlList: photoUrlList
+      }
+      PhotoApi.savePhotos(photoData).then(res => {
+        if (res.flag) {
+          this.$notify.success({
+            title: '成功',
+            message: res.message
+          })
+          this.uploadList = []
+          this.listPhotos()
+        }
+      }).catch(error => {
+        console.log(error)
+      })
     },
     updatePhoto() {
 
@@ -320,48 +341,51 @@ export default {
     handleRemove(file) {
       this.uploadList.forEach((item, index) => {
         if (item.url === file.url) {
-          this.uploadList.splice(index, 1);
+          this.uploadList.splice(index, 1)
         }
-      });
+      })
     },
     upload(response) {
-      this.uploadList.push({ url: response.data });
+      console.log("上传的")
+      console.log(response)
+      this.uploadList.push({ url: response.data })
     },
     beforeUpload(file) {
-      return new Promise(resolve => {
-        if (file.size / 1024 < this.config.UPLOAD_SIZE) {
-          resolve(file);
+      const c = new Promise(resolve => {
+        if (file.size / 1024 < constants.UPLOAD_SIZE) {
+          resolve(file)
         }
         // 压缩到200KB,这里的200就是要压缩的大小,可自定义
         imageConversion
-          .compressAccurately(file, this.config.UPLOAD_SIZE)
+          .compressAccurately(file, constants.UPLOAD_SIZE)
           .then(res => {
-            resolve(res);
-          });
-      });
+            resolve(res)
+          })
+      })
+      console.log(c)
+      return c
     },
     handleCheckAllChange(val) {
-      this.selectPhotoIdList = val ? this.photoIdList : [];
-      this.isIndeterminate = false;
+      this.selectPhotoIdList = val ? this.photoIdList : []
+      this.isIndeterminate = false
     },
     handleCheckedPhotoChange(value) {
-      let checkedCount = value.length;
-      this.checkAll = checkedCount === this.photoIdList.length;
+      const checkedCount = value.length
+      this.checkAll = checkedCount === this.photoIdList.length
       this.isIndeterminate =
-        checkedCount > 0 && checkedCount < this.photoIdList.length;
+        checkedCount > 0 && checkedCount < this.photoIdList.length
     },
     handleCommand(command) {
-      this.photoForm = JSON.parse(command);
-      this.editPhoto = true;
+      this.photoForm = JSON.parse(command)
+      this.editPhoto = true
     },
     updatePhotoDelete(id) {
-      var param = {};
+      let param = {}
       if (id == null) {
-        param = { idList: this.selectPhotoIdList, isDelete: 1 };
+        param = { idList: this.selectPhotoIdList, isDelete: 1 }
       } else {
-        param = { idList: [id], isDelete: 1 };
+        param = { idList: [id], isDelete: 1 }
       }
-
     }
   }
 }

@@ -15,6 +15,13 @@ export default {
         isDelete: 0
       }
     })
-  }
+  },
+  savePhotos(photoData) {
+    return request({
+      url: base + '/uploadPhotos',
+      method: 'post',
+      data: photoData
+    })
+  },
 
 }
