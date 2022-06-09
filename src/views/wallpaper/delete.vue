@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import PhotoApi from '@/api/photos'
+import PhotoApi from '@/api/wallpaper/photos'
 export default {
   data() {
     return {

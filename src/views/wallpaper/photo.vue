@@ -229,8 +229,8 @@
 </template>
 
 <script>
-import AlbumAPI from '@/api/album'
-import PhotoApi from '@/api/photos'
+import AlbumAPI from '@/api/wallpaper/album'
+import PhotoApi from '@/api/wallpaper/photos'
 import * as imageConversion from 'image-conversion'
 import * as constants from '../../utils/constants'
 

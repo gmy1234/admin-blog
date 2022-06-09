@@ -140,7 +140,7 @@
 <script>
 
 import * as imageConversion from 'image-conversion'
-import AlbumAPI from '../../api/album'
+import AlbumAPI from '../../api/wallpaper/album'
 import * as constants from '../../utils/constants'
 export default {
   name: 'Album',
