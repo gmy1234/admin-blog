@@ -225,6 +225,28 @@ export const constantRoutes = [
     ]
   },
 
+  // 系统管理：
+  {
+    path: '/system',
+    component: Layout,
+    name: '系统管理',
+    meta: { title: '系统管理', icon: 'el-icon-setting' },
+    children: [
+      {
+        path: '/webConfig',
+        name: '网站管理',
+        component: () => import('@/views/system/webConfig.vue'),
+        meta: { title: '网站管理', icon: 'el-icon-setting' }
+      },
+      {
+        path: '/background',
+        name: '背景管理',
+        component: () => import('@/views/system/background'),
+        meta: { title: '背景管理', icon: 'el-icon-picture-outline-round' }
+      }
+    ]
+  },
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
