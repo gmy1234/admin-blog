@@ -6,8 +6,15 @@ export default {
   // 获取后台网站配置
   getWebConfig() {
     return request({
-      url: base + '/config',
+      url: base + '/getConfig',
       method: 'get'
+    })
+  },
+  updateWebConfig(configData) {
+    return request({
+      url: base + '/updateConfig',
+      method: 'post',
+      data: configData
     })
   }
 

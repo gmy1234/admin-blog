@@ -11,7 +11,7 @@
           <el-form-item label="网站头像">
             <el-upload
               class="avatar-uploader"
-              action="/api/admin/config/images"
+              :action="uploadAvatar"
               :show-file-list="false"
               :on-success="handleWebsiteAvatarSuccess"
             >
@@ -19,7 +19,8 @@
                 v-if="websiteConfigForm.websiteAvatar"
                 :src="websiteConfigForm.websiteAvatar"
                 class="avatar"
-              />
+                style="object-fit: cover;"
+              >
               <i v-else class="el-icon-plus avatar-uploader-icon" />
             </el-upload>
           </el-form-item>
@@ -46,9 +47,9 @@
           </el-form-item>
           <el-form-item label="网站创建日期">
             <el-date-picker
+              v-model="websiteConfigForm.websiteCreateTime"
               style="width:400px"
               value-format="yyyy-MM-dd"
-              v-model="websiteConfigForm.websiteCreateTime"
               type="date"
               placeholder="选择日期"
             />
@@ -136,7 +137,7 @@
               <el-form-item label="用户头像">
                 <el-upload
                   class="avatar-uploader"
-                  action="/api/admin/config/images"
+                  :action="uploadAvatar"
                   :show-file-list="false"
                   :on-success="handleUserAvatarSuccess"
                 >
@@ -144,7 +145,7 @@
                     v-if="websiteConfigForm.userAvatar"
                     :src="websiteConfigForm.userAvatar"
                     class="avatar"
-                  />
+                  >
                   <i v-else class="el-icon-plus avatar-uploader-icon" />
                 </el-upload>
               </el-form-item>
@@ -153,7 +154,7 @@
               <el-form-item label="游客头像">
                 <el-upload
                   class="avatar-uploader"
-                  action="/api/admin/config/images"
+                  :action="uploadAvatar"
                   :show-file-list="false"
                   :on-success="handleTouristAvatarSuccess"
                 >
@@ -161,7 +162,7 @@
                     v-if="websiteConfigForm.touristAvatar"
                     :src="websiteConfigForm.touristAvatar"
                     class="avatar"
-                  />
+                  >
                   <i v-else class="el-icon-plus avatar-uploader-icon" />
                 </el-upload>
               </el-form-item>
@@ -191,7 +192,7 @@
               <el-radio :label="1">开启</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-row style="width:600px" v-show="websiteConfigForm.isReward == 1">
+          <el-row v-show="websiteConfigForm.isReward === 1" style="width:600px">
             <el-col :md="12">
               <el-form-item label="微信收款码">
                 <el-upload
@@ -204,7 +205,7 @@
                     v-if="websiteConfigForm.weiXinQRCode"
                     :src="websiteConfigForm.weiXinQRCode"
                     class="avatar"
-                  />
+                  >
                   <i v-else class="el-icon-plus avatar-uploader-icon" />
                 </el-upload>
               </el-form-item>
@@ -221,7 +222,7 @@
                     v-if="websiteConfigForm.alipayQRCode"
                     :src="websiteConfigForm.alipayQRCode"
                     class="avatar"
-                  />
+                  >
                   <i v-else class="el-icon-plus avatar-uploader-icon" />
                 </el-upload>
               </el-form-item>
@@ -234,8 +235,8 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item
+            v-show="websiteConfigForm.isChatRoom === 1"
             label="Websocket地址"
-            v-show="websiteConfigForm.isChatRoom == 1"
           >
             <el-input
               v-model="websiteConfigForm.websocketUrl"
@@ -265,36 +266,38 @@
 
 <script>
 import WebConfigApi from '@/api/webConfig'
+import constants from '@/utils/constants'
 export default {
   name: 'WebConfig',
   data() {
     return {
       websiteConfigForm: {
-        websiteAvatar: "",
-        websiteName: "",
-        websiteAuthor: "",
-        websiteIntro: "",
-        websiteNotice: "",
+        websiteAvatar: '',
+        websiteName: '',
+        websiteAuthor: '',
+        websiteIntro: '',
+        websiteNotice: '',
         websiteCreateTime: null,
-        websiteRecordNo: "",
+        websiteRecordNo: '',
         socialLoginList: [],
         socialUrlList: [],
-        qq: "",
-        github: "",
+        qq: '',
+        github: '',
         gitee: '',
-        userAvatar: "",
-        touristAvatar: "",
+        userAvatar: '',
+        touristAvatar: '',
         isReward: 1,
-        weiXinQRCode: "",
+        weiXinQRCode: '',
         alipayQRCode: '',
         isChatRoom: 1,
-        websocketUrl: "",
+        websocketUrl: '',
         isMusicPlayer: 1,
         isEmailNotice: 1,
         isCommentReview: 0,
         isMessageReview: 0
       },
-      activeName: 'info'
+      activeName: 'info',
+      uploadAvatar: constants.BASE_UPLOAD_URL + '/admin/album/uploadCover'
     }
   },
   created() {
@@ -313,23 +316,30 @@ export default {
       console.log(tab)
     },
     handleWebsiteAvatarSuccess(response) {
-      this.websiteConfigForm.websiteAvatar = response.data;
+      this.websiteConfigForm.websiteAvatar = response.data
     },
     handleUserAvatarSuccess(response) {
-      this.websiteConfigForm.userAvatar = response.data;
+      this.websiteConfigForm.userAvatar = response.data
     },
     handleTouristAvatarSuccess(response) {
-      this.websiteConfigForm.touristAvatar = response.data;
+      this.websiteConfigForm.touristAvatar = response.data
     },
     handleWeiXinSuccess(response) {
-      this.websiteConfigForm.weiXinQRCode = response.data;
+      this.websiteConfigForm.weiXinQRCode = response.data
     },
     handleAlipaySuccess(response) {
-      this.websiteConfigForm.alipayQRCode = response.data;
+      this.websiteConfigForm.alipayQRCode = response.data
     },
     updateWebsiteConfig() {
-
-
+      WebConfigApi.updateWebConfig(this.websiteConfigForm).then(res => {
+        if (res.flag) {
+          this.$notify.success({ title: '成功', message: res.message })
+        } else {
+          this.$notify.error({ title: '失败', message: res.message })
+        }
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }
