@@ -8,7 +8,7 @@ import constants from '@/utils/constants'
 const service = axios.create({
 
   // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url 官方原来的
-  baseURL: constants.DEV_BASE_URL,
+  baseURL: constants.PROD_BASE_URL,
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 10000 // request timeout
 })
