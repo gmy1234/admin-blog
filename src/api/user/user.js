@@ -32,6 +32,17 @@ export default {
         keywords: this.keywords
       }
     })
+  },
+
+  // 用户范围
+  listUserArea(type) {
+    return request({
+      url: base + '/area',
+      method: 'get',
+      params: {
+        type: type
+      }
+    })
   }
 
 }
