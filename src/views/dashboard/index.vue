@@ -85,7 +85,6 @@
 </template>
 
 <script>
-import '../../components/tag-cloud'
 import BlogApi from '@/api/webConfig'
 import UserApi from '@/api/user/user'
 import '../../assets/js/china'
@@ -108,7 +107,6 @@ export default {
             type: 'cross'
           }
         },
-        color: ['#3888fa'],
         legend: {
           data: ['访问量']
         },
@@ -121,20 +119,10 @@ export default {
         },
         xAxis: {
           data: [],
-          axisLine: {
-            lineStyle: {
-              // 设置x轴颜色
-              color: '#666'
-            }
-          }
+          type: 'category'
         },
         yAxis: {
-          axisLine: {
-            lineStyle: {
-              // 设置y轴颜色
-              color: '#048CCE'
-            }
-          }
+          type: 'value'
         },
         series: [
           {
@@ -289,7 +277,6 @@ export default {
   methods: {
     getBasicData() {
       BlogApi.getBasicInfo().then(res => {
-        console.log(res)
         // 访问量
         this.viewsCount = res.data.viewsCount
         // 消息量
@@ -299,6 +286,9 @@ export default {
         // 文章数量
         this.articleCount = res.data.articleCount
         // 标签
+        // 文章状态
+        this.articleStatisticsList = res.data.articleStatisticsList
+        // 文章标签统计
         if (res.data.tagDTOList != null) {
           res.data.tagDTOList.forEach(item => {
             this.tagDTOList.push({
@@ -307,8 +297,7 @@ export default {
             })
           })
         }
-        // 文章状态
-        this.articleStatisticsList = res.data.articleStatisticsList
+        // 网站访问量
         if (res.data.uniqueViewDTOList != null) {
           res.data.uniqueViewDTOList.forEach(item => {
             this.viewCount.xAxis.data.push(item.day)
@@ -328,8 +317,8 @@ export default {
         // 文章阅读量排行
         if (res.data.articleRankDTOList != null) {
           res.data.articleRankDTOList.forEach(item => {
-            this.ariticleRank.series[0].data.push(item.viewsCount)
-            this.ariticleRank.xAxis.data.push(item.articleTitle)
+            this.articleRank.series[0].data.push(item.viewsCount)
+            this.articleRank.xAxis.data.push(item.articleTitle)
           })
         }
         this.loading = false
