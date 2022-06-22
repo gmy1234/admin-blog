@@ -47,28 +47,290 @@
         </el-card>
       </el-col>
     </el-row>
+    <!-- 一周访问量 -->
+    <el-card style="margin-top:1.25rem">
+      <div class="e-title">一周访问量</div>
+      <div style="height:350px">
+        <v-chart :loading="loading" :option="viewCount" />
+      </div>
+    </el-card>
+
+    <el-row :gutter="20" style="margin-top:1.25rem">
+      <!-- 用户地域分布 -->
+      <el-col :span="16">
+        <el-card>
+          <div class="e-title">用户地域分布</div>
+          <div :loading="loading" style="height:350px">
+            <div class="area-wrapper">
+              <el-radio-group v-model="type">
+                <el-radio :label="1">用户</el-radio>
+                <el-radio :label="2">游客</el-radio>
+              </el-radio-group>
+            </div>
+            <v-chart :option="userAreaMap" />
+          </div>
+        </el-card>
+      </el-col>
+      <!-- 文章标签统计 -->
+      <el-col :span="8">
+        <el-card>
+          <div class="e-title">文章标签统计</div>
+          <div :loading="loading" style="height:350px;">
+            <tag-cloud style="margin-top:1.5rem" :data="tagDTOList" />
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-
+import BlogApi from '@/api/webConfig'
+import UserApi from '@/api/user/user'
+import '../../assets/js/china'
 export default {
   name: 'Dashboard',
   data() {
     return {
+      loading: true, // 标识
+      type: 1,
       viewsCount: 0,
       messageCount: 0,
       userCount: 0,
-      articleCount: 0
+      articleCount: 0,
+      articleStatisticsList: [],
+      tagDTOList: [],
+      viewCount: {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross'
+          }
+        },
+        legend: {
+          data: ['访问量']
+        },
+        grid: {
+          left: '0%',
+          right: '0%',
+          bottom: '0%',
+          top: '10%',
+          containLabel: true
+        },
+        xAxis: {
+          data: [],
+          type: 'category'
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            name: '访问量',
+            type: 'line',
+            data: [],
+            smooth: true
+          }
+        ]
+      },
+      articleRank: {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross'
+          }
+        },
+        color: ['#58AFFF'],
+        grid: {
+          left: '0%',
+          right: '0%',
+          bottom: '0%',
+          top: '10%',
+          containLabel: true
+        },
+        xAxis: {
+          data: []
+        },
+        yAxis: {},
+        series: [
+          {
+            name: ['浏览量'],
+            type: 'bar',
+            data: []
+          }
+        ]
+      },
+      category: {
+        color: [
+          '#7EC0EE',
+          '#FF9F7F',
+          '#FFD700',
+          '#C9C9C9',
+          '#E066FF',
+          '#C0FF3E'
+        ],
+        legend: {
+          data: [],
+          bottom: 'bottom'
+        },
+        tooltip: {
+          trigger: 'item'
+        },
+        series: [
+          {
+            name: '文章分类',
+            type: 'pie',
+            roseType: 'radius',
+            data: []
+          }
+        ]
+      },
+      userAreaMap: {
+        tooltip: {
+          formatter: function(e) {
+            var value = e.value ? e.value : 0
+            return e.seriesName + '<br />' + e.name + '：' + value
+          }
+        },
+        visualMap: {
+          min: 0,
+          max: 1000,
+          right: 26,
+          bottom: 40,
+          showLabel: !0,
+          pieces: [
+            {
+              gt: 100,
+              label: '100人以上',
+              color: '#ED5351'
+            },
+            {
+              gte: 51,
+              lte: 100,
+              label: '51-100人',
+              color: '#59D9A5'
+            },
+            {
+              gte: 21,
+              lte: 50,
+              label: '21-50人',
+              color: '#F6C021'
+            },
+            {
+              label: '1-20人',
+              gt: 0,
+              lte: 20,
+              color: '#6DCAEC'
+            }
+          ],
+          show: !0
+        },
+        geo: {
+          map: 'china',
+          zoom: 1.2,
+          layoutCenter: ['50%', '50%'], // 地图中心在屏幕中的位置
+          //   label: {
+          //     normal: {
+          //       show: !0,
+          //       fontSize: "12",
+          //       color: "rgba(0,0,0,0.7)"
+          //     }
+          //   },
+          itemStyle: {
+            normal: {
+              borderColor: 'rgba(0, 0, 0, 0.2)'
+            },
+            emphasis: {
+              areaColor: '#F5DEB3',
+              shadowOffsetX: 0,
+              shadowOffsetY: 0,
+              borderWidth: 0
+            }
+          }
+        },
+        series: [
+          {
+            name: '用户人数',
+            type: 'map',
+            geoIndex: 0,
+            data: [],
+            areaColor: '#0FB8F0'
+          }
+        ]
+      }
 
     }
   },
   computed: {
 
   },
+  watch: {
+    // 监听type 改变
+    type() {
+      this.listUserArea()
+    }
+  },
   created() {
+    this.getBasicData()
+    this.listUserArea()
   },
   methods: {
+    getBasicData() {
+      BlogApi.getBasicInfo().then(res => {
+        // 访问量
+        this.viewsCount = res.data.viewsCount
+        // 消息量
+        this.messageCount = res.data.messageCount
+        // 用户量
+        this.userCount = res.data.userCount
+        // 文章数量
+        this.articleCount = res.data.articleCount
+        // 标签
+        // 文章状态
+        this.articleStatisticsList = res.data.articleStatisticsList
+        // 文章标签统计
+        if (res.data.tagDTOList != null) {
+          res.data.tagDTOList.forEach(item => {
+            this.tagDTOList.push({
+              id: item.id,
+              name: item.tagName
+            })
+          })
+        }
+        // 网站访问量
+        if (res.data.uniqueViewDTOList != null) {
+          res.data.uniqueViewDTOList.forEach(item => {
+            this.viewCount.xAxis.data.push(item.day)
+            this.viewCount.series[0].data.push(item.viewsCount)
+          })
+        }
+        // 文章分类
+        if (res.data.categoryDTOList != null) {
+          res.data.categoryDTOList.forEach(item => {
+            this.category.series[0].data.push({
+              value: item.articleCount,
+              name: item.categoryName
+            })
+            this.category.legend.data.push(item.categoryName)
+          })
+        }
+        // 文章阅读量排行
+        if (res.data.articleRankDTOList != null) {
+          res.data.articleRankDTOList.forEach(item => {
+            this.articleRank.series[0].data.push(item.viewsCount)
+            this.articleRank.xAxis.data.push(item.articleTitle)
+          })
+        }
+        this.loading = false
+      })
+    },
+    // 获取用户的范围
+    listUserArea() {
+      UserApi.listUserArea(this.type).then(res => {
+        console.log(res)
+        this.userAreaMap.series[0].data = res.data
+      })
+    }
 
   }
 }

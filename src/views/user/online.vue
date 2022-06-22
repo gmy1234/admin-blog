@@ -29,7 +29,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column prop="avatar" label="头像" align="center" width="100">
         <template slot-scope="scope">
-          <img :src="scope.row.avatar" width="40" height="40" />
+          <img :src="scope.row.avatar" width="40" height="40">
         </template>
       </el-table-column>
       <el-table-column prop="nickname" label="昵称" align="center" />
@@ -65,7 +65,7 @@
             style="margin-left:10px"
             @confirm="removeOnlineUser(scope.row)"
           >
-            <el-button size="mini" type="text" slot="reference">
+            <el-button slot="reference" size="mini" type="text">
               <i class="el-icon-delete" /> 下线
             </el-button>
           </el-popconfirm>
@@ -76,13 +76,13 @@
     <el-pagination
       class="pagination-container"
       background
-      @size-change="sizeChange"
-      @current-change="currentChange"
       :current-page="current"
       :page-size="size"
       :total="count"
       :page-sizes="[10, 20]"
       layout="total, sizes, prev, pager, next, jumper"
+      @size-change="sizeChange"
+      @current-change="currentChange"
     />
   </el-card>
 </template>
@@ -142,8 +142,15 @@ export default {
       this.current = current
       this.listOnlineUsers()
     },
+    // 下线用户
     removeOnlineUser(user) {
-
+      UserAPI.offlineUser(user.userInfoId).then(res => {
+        if (res.flag) {
+          this.$notify.success({ title: '成功', message: res.message })
+        } else {
+          this.$message.error('下线失败')
+        }
+      })
     }
   }
 }

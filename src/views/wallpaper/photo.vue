@@ -47,7 +47,7 @@
         </el-button>
         <el-button
             type="danger"
-            :disabled="selectPhotoIdList.length == 0"
+            :disabled="selectPhotoIdList.length === 0"
             size="small"
             icon="el-icon-deleteItem"
             @click="batchDeletePhoto = true"

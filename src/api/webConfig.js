@@ -16,6 +16,14 @@ export default {
       method: 'post',
       data: configData
     })
+  },
+
+  // 获取网站基本信息
+  getBasicInfo() {
+    return request({
+      url: base + '/basic/info',
+      method: 'get'
+    })
   }
 
 }
