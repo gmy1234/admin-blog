@@ -201,7 +201,12 @@ export default {
 
     },
     openEditModel(user) {
-
+      this.roleIdList = []
+      this.userForm = JSON.parse(JSON.stringify(user))
+      this.userForm.roleList.forEach(item => {
+        this.roleIdList.push(item.id)
+      })
+      this.isEdit = true
     },
     editUserRole() {
 
