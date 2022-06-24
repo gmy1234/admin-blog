@@ -266,7 +266,7 @@ export default {
       current: 1,
       size: 18,
       count: 0,
-      baseURL: 'http://localhost:8000/api/admin/album/uploadCover'
+      baseURL: 'http://43.138.22.185:15000/api/admin/album/uploadCover'
     }
   },
   watch: {
