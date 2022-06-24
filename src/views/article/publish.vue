@@ -244,7 +244,7 @@ export default {
         type: 1,
         status: 1
       },
-      baseURL: 'http://localhost:8000/api/admin/upload/articles/images'
+      baseURL: 'http://43.138.22.185:15000/api/admin/upload/articles/images'
     }
   },
   computed: {
