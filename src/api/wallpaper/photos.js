@@ -31,6 +31,14 @@ export default {
       method: 'post',
       data: photoData
     })
+  },
+  // 更新照片删除状态
+  updatePhotos(id) {
+    return request({
+      url: base + '/updatePhoto',
+      method: 'post',
+      data: id
+    })
   }
 
 }
