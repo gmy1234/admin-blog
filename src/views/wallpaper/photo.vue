@@ -322,10 +322,7 @@ export default {
       }
       PhotoApi.savePhotos(photoData).then(res => {
         if (res.flag) {
-          this.$notify.success({
-            title: '成功',
-            message: res.message
-          })
+          this.$notify.success({ title: '成功', message: res.message })
           this.uploadList = []
           this.listPhotos()
         }
@@ -343,18 +340,12 @@ export default {
       }
       PhotoApi.movePhotos(photoData).then(res => {
         if (res.flag) {
-          this.$notify.success({
-            title: '成功',
-            message: res.message
-          })
+          this.$notify.success({ title: '成功', message: res.message })
           this.movePhoto = false
           this.getAlbumInfo()
           this.listPhotos()
         } else {
-          this.$notify.error({
-            title: '失败',
-            message: res.message
-          })
+          this.$notify.error({ title: '失败', message: res.message })
         }
       })
     },
@@ -368,7 +359,11 @@ export default {
     upload(response) {
       console.log('上传的')
       console.log(response)
-      this.uploadList.push({ url: response.data })
+      if (response.flag) {
+        this.uploadList.push({ url: response.data })
+      } else {
+        this.$message.error(response.message)
+      }
     },
     beforeUpload(file) {
       const c = new Promise(resolve => {
@@ -377,9 +372,7 @@ export default {
         }
         // 压缩到200KB,这里的200就是要压缩的大小,可自定义
         imageConversion.compressAccurately(file, constants.UPLOAD_SIZE)
-            .then(res => {
-              resolve(res)
-            })
+          .then(res => { resolve(res) })
       })
       console.log(c)
       return c
