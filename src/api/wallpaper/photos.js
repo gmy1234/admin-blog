@@ -39,6 +39,14 @@ export default {
       method: 'post',
       data: id
     })
+  },
+  // 照片删除
+  deletePhotos(ids) {
+    return request({
+      url: base + '/deletePhoto',
+      method: 'post',
+      data: ids
+    })
   }
 
 }

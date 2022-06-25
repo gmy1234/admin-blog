@@ -13,14 +13,11 @@
       </el-button>
       <div style="margin-left:auto">
         <el-button
-          type="text"
-          size="small"
+          type="danger"
           icon="el-icon-delete"
+          circle
           style="margin-right:1rem"
-          @click="checkDelete"
-        >
-          回收站
-        </el-button>
+          @click="checkDelete"/>
         <el-input
           v-model="keywords"
           prefix-icon="el-icon-search"
