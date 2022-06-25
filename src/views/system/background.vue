@@ -115,7 +115,7 @@ export default {
         backgroundCover: ''
       },
       backgroundList: [],
-      uploadBack: constants.BASE_UPLOAD_URL + '/admin/album/uploadCover'
+      uploadBack: constants.PROD_BASE_URL + '/admin/album/uploadCover'
     }
   },
   created() {
