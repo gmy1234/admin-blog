@@ -36,7 +36,7 @@
     <!-- 照片列表 -->
     <el-row class="photo-container" :gutter="10" v-loading="loading">
       <!-- 空状态 -->
-      <el-empty v-if="photoList.length == 0" description="暂无照片" />
+      <el-empty v-if="photoList.length === 0" description="暂无照片" />
       <el-checkbox-group
         v-model="selectPhotoIdList"
         @change="handleCheckedPhotoChange"
@@ -130,8 +130,22 @@ export default {
     updatePhotoDelete(id) {
 
     },
+    // 删除照片
     deletePhotos() {
-
+      const ids = this.selectPhotoIdList
+      const param = { data: ids }
+      PhotoApi.deletePhotos(param).then(res => {
+        console.log(res)
+        if (res.flag) {
+          this.$notify.success('删除成功')
+          this.batchDeletePhoto = false
+          this.listPhotos()
+        } else {
+          this.$notify.error(res.message)
+        }
+      }).catch(error => {
+        console.log(error)
+      })
     },
     handleCheckAllChange(val) {
       this.selectPhotoIdList = val ? this.photoIdList : []
