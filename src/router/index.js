@@ -142,6 +142,33 @@ export const constantRoutes = [
     ]
   },
 
+  // 说说管理
+  {
+    path: '/talk',
+    component: Layout,
+    name: '说说管理',
+    meta: { title: '说说管理', icon: 'el-icon-picture' },
+    children: [
+      {
+        path: 'edit',
+        name: '发布说说',
+        component: () => import('@/views/talk/edit.vue'),
+        meta: { title: '发布说说', icon: 'el-icon-s-promotion' }
+      },
+      {
+        path: 'edit/:id',
+        name: '编辑说说',
+        component: () => import('@/views/talk/edit.vue')
+      },
+      {
+        path: 'list',
+        name: '说说列表',
+        component: () => import('@/views/talk/talkList.vue'),
+        meta: { title: '说说列表', icon: 'el-icon-chat-square' }
+      }
+    ]
+  },
+
   // 消息管理：
   {
     path: '/',
