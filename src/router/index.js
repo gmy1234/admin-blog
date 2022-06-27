@@ -150,7 +150,7 @@ export const constantRoutes = [
     meta: { title: '说说管理', icon: 'el-icon-picture' },
     children: [
       {
-        path: 'edit',
+        path: 'publish',
         name: '发布说说',
         component: () => import('@/views/talk/edit.vue'),
         meta: { title: '发布说说', icon: 'el-icon-s-promotion' }

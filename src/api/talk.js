@@ -23,9 +23,16 @@ export default {
   },
   deleteTalk(talkId) {
     return request({
-      url: base + '/delete',
-      method: 'post',
-      data: [talkId]
+      url: base + '/delete/' + talkId,
+      method: 'post'
+    })
+  },
+  getTalkById(talkId) {
+    return request({
+      url: base + '/' + talkId,
+      method: 'get'
+
     })
   }
+
 }

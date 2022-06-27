@@ -140,14 +140,14 @@ export default {
       this.listTalks()
     },
     deleteTalk() {
-      TalkAPI.deleteTalk([this.talkId]).then(res => {
-        if (res.data.flag) {
-          this.$notify.success(res.data.message)
+      TalkAPI.deleteTalk(this.talkId).then(res => {
+        if (res.flag) {
+          this.$notify.success(res.message)
           this.listTalks()
         } else {
-          this.$notify.error(res.data.message)
+          this.$notify.error(res.message)
         }
-        this.isdelete = false
+        this.isDelete = false
       })
     }
 
