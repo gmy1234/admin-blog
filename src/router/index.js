@@ -45,11 +45,11 @@ export const constantRoutes = [
 
   // 首页
   {
-    path: '/',
+    path: '/dashboard',
     component: Layout,
-    redirect: '/dashboard',
+    // redirect: '/dashboard',
     children: [{
-      path: 'dashboard',
+      path: '',
       name: '首页',
       component: () => import('@/views/dashboard/index'),
       meta: { title: 'dashboard', icon: 'dashboard' }
@@ -138,6 +138,33 @@ export const constantRoutes = [
         path: 'delete',
         name: '回收站',
         component: () => import('@/views/wallpaper/delete')
+      }
+    ]
+  },
+
+  // 说说管理
+  {
+    path: '/talk',
+    component: Layout,
+    name: '说说管理',
+    meta: { title: '说说管理', icon: 'el-icon-picture' },
+    children: [
+      {
+        path: 'publish',
+        name: '发布说说',
+        component: () => import('@/views/talk/edit.vue'),
+        meta: { title: '发布说说', icon: 'el-icon-s-promotion' }
+      },
+      {
+        path: 'edit/:id',
+        name: '编辑说说',
+        component: () => import('@/views/talk/edit.vue')
+      },
+      {
+        path: 'list',
+        name: '说说列表',
+        component: () => import('@/views/talk/talkList.vue'),
+        meta: { title: '说说列表', icon: 'el-icon-chat-square' }
       }
     ]
   },
