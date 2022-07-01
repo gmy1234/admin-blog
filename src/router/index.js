@@ -208,6 +208,12 @@ export const constantRoutes = [
         name: '背景管理',
         component: () => import('@/views/system/background'),
         meta: { title: '背景管理', icon: 'el-icon-picture-outline-round' }
+      },
+      {
+        path: '/friendLink',
+        name: '友链管理',
+        component: () => import('@/views/system/friendLink'),
+        meta: { title: '友链管理', icon: 'el-icon-picture-outline-round' }
       }
     ]
   },
