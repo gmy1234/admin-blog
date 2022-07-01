@@ -9,6 +9,13 @@ export default {
       url: base + '/getRole',
       method: 'get'
     })
+  },
+  updateRole(userRole) {
+    return request({
+      url: base + '/updateRole',
+      method: 'post',
+      data: userRole
+    })
   }
 
 }

@@ -15,6 +15,6 @@ export function isExternal(path) {
  * @returns {Boolean}
  */
 export function validUsername(str) {
-  const valid_map = ['admin', 'admin@qq.com', 'editor']
+  const valid_map = ['admin@qq.com', 'editor', 'visitor@qq.com']
   return valid_map.indexOf(str.trim()) >= 0
 }
