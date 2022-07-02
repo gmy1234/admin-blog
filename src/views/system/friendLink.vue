@@ -15,7 +15,7 @@
         type="danger"
         size="small"
         icon="el-icon-delete"
-        :disabled="linkIdList.length == 0"
+        :disabled="linkIdList.length === 0"
         @click="deleteFlag = true"
       >
         批量删除
@@ -43,10 +43,10 @@
     </div>
     <!-- 表格展示 -->
     <el-table
+      v-loading="loading"
       border
       :data="linkList"
       @selection-change="selectionChange"
-      v-loading="loading"
     >
       <!-- 表格列 -->
       <el-table-column type="selection" width="55"/>
@@ -149,10 +149,6 @@ import FriendLinkAPI from '@/api/friendLink'
 
 export default {
   name: 'FriendLink',
-
-  created() {
-    this.listLinks()
-  },
   data() {
     return {
       loading: true,
@@ -172,6 +168,9 @@ export default {
       size: 10,
       count: 0
     }
+  },
+  created() {
+    this.listLinks()
   },
   methods: {
     selectionChange(linkList) {
