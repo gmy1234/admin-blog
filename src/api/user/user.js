@@ -41,7 +41,6 @@ export default {
       url: base + '/offline/' + userInfoId,
       method: 'delete'
     })
-
   },
   // 用户范围
   listUserArea(type) {

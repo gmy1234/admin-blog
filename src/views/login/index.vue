@@ -49,8 +49,8 @@
         <div><el-avatar :size="200" class="background-syy"></el-avatar></div>
       </el-row>
       <el-row span="24">
-        <div class="font">欢迎光临，爷得游乐园</div>
-        <div class="font">🎉🎉🎉🎉  👴🉐️🎠🎢🏀  😎</div>
+        <div class="font">欢迎光临</div>
+        <div class="font">🎉🎉🎉🎉</div>
       </el-row>
     </el-col>
   </div>

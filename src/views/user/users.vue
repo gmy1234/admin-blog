@@ -209,7 +209,19 @@ export default {
       this.isEdit = true
     },
     editUserRole() {
-
+      this.userForm.roleIdList = this.roleIdList
+      console.log(this.userForm)
+      RoleAPI.updateRole(this.userForm).then(res => {
+        console.log(res)
+        if (res.flag) {
+          this.$message.success('更新成功')
+          this.isEdit = false
+        } else {
+          this.$message.error('更新失败')
+        }
+      }).catch(error => {
+        console.log(error)
+      })
     },
     sizeChange(size) {
       this.size = size
