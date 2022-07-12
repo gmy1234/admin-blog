@@ -214,6 +214,12 @@ export const constantRoutes = [
         name: '友链管理',
         component: () => import('@/views/system/friendLink'),
         meta: { title: '友链管理', icon: 'el-icon-picture-outline-round' }
+      },
+      {
+        path: '/log',
+        name: '日志',
+        component: () => import('@/views/system/log.vue'),
+        meta: { title: '日志列表', icon: null }
       }
     ]
   },
