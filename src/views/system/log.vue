@@ -35,9 +35,9 @@
     </div>
     <!-- 权限列表 -->
     <el-table
-      @selection-change="selectionChange"
-      v-loading="loading"
+      :loading="loading"
       :data="logList"
+      @selection-change="selectionChange"
     >
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column
@@ -97,8 +97,8 @@
       <el-table-column label="操作" align="center" width="150">
         <template slot-scope="scope">
           <el-button
-            size="mini"
             slot="reference"
+            size="mini"
             type="text"
             @click="check(scope.row)"
           >
@@ -116,9 +116,63 @@
         </template>
       </el-table-column>
     </el-table>
-    <div>
-      <span>日志列表</span>
-    </div>
+    <!-- 分页 -->
+    <el-pagination
+      class="pagination-container"
+      background
+      @size-change="sizeChange"
+      @current-change="currentChange"
+      :current-page="current"
+      :page-size="size"
+      :total="count"
+      :page-sizes="[10, 20]"
+      layout="total, sizes, prev, pager, next, jumper"
+    />
+    <!-- 查看模态框 -->
+    <el-dialog :visible.sync="isCheck" width="40%">
+      <div class="dialog-title-container" slot="title">
+        <i class="el-icon-more"/>详细信息
+      </div>
+
+      <el-form ref="form" :model="optLog" label-width="100px" size="mini">
+        <el-form-item label="操作模块：">
+          {{ optLog.optModule }}
+        </el-form-item>
+        <el-form-item label="请求地址：">
+          {{ optLog.optUrl }}
+        </el-form-item>
+        <el-form-item label="请求方式：">
+          <el-tag :type="tagType(optLog.requestMethod)">
+            {{ optLog.requestMethod }}
+          </el-tag>
+        </el-form-item>
+        <el-form-item label="操作方法：">
+          {{ optLog.optMethod }}
+        </el-form-item>
+        <el-form-item label="请求参数：">
+          {{ optLog.requestParam }}
+        </el-form-item>
+        <el-form-item label="返回数据：">
+          {{ optLog.responseData }}
+        </el-form-item>
+        <el-form-item label="操作人员：">
+          {{ optLog.nickname }}
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+    <!-- 批量删除对话框 -->
+    <el-dialog :visible.sync="isDelete" width="30%">
+      <div class="dialog-title-container" slot="title">
+        <i class="el-icon-warning" style="color:#ff9900"/>提示
+      </div>
+      <div style="font-size:1rem">是否删除选中项？</div>
+      <div slot="footer">
+        <el-button @click="isDelete = false">取 消</el-button>
+        <el-button type="primary" @click="deleteLog(null)">
+          确 定
+        </el-button>
+      </div>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -134,9 +188,11 @@ export default {
       keywords: '',
       size: 10,
       current: 0,
-      loading: false,
+      loading: true,
       logList: [],
-      count: 0 // 操作日志的数量
+      count: 0, // 操作日志的数量
+      isCheck: false,
+      optLog: {}
     }
   },
   computed: {
@@ -178,12 +234,20 @@ export default {
         console.log(error)
       })
     },
-
-    check() {
-
+    check(optLog) {
+      this.optLog = JSON.parse(JSON.stringify(optLog))
+      this.isCheck = true
     },
     deleteLog() {
 
+    },
+    sizeChange(size) {
+      this.size = size
+      this.listLogs()
+    },
+    currentChange(current) {
+      this.current = current
+      this.listLogs()
     }
 
   }

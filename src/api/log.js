@@ -14,5 +14,13 @@ export default {
         size: size
       }
     })
+  },
+  // 根据日志ID查看日志详情
+  operationLogsDetailById(logId) {
+    return request({
+      url: base + '/logsDetail',
+      method: 'get',
+      params: { logId }
+    })
   }
 }
